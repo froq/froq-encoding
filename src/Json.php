@@ -64,7 +64,6 @@ final class Json
 
     /**
      * Constructor.
-     *
      * @param any $data
      */
     final public function __construct($data = null)
@@ -74,7 +73,6 @@ final class Json
 
     /**
      * Set data.
-     *
      * @param  any $data
      * @return self
      */
@@ -87,7 +85,6 @@ final class Json
 
     /**
      * Get data.
-     *
      * @return any
      */
     final public function getData($data)
@@ -97,7 +94,6 @@ final class Json
 
     /**
      * Encoder.
-     *
      * @return string
      */
     final public function encode(...$args): string
@@ -122,7 +118,6 @@ final class Json
 
     /**
      * Decoder.
-     *
      * @return any
      */
     final public function decode(...$args)
@@ -147,7 +142,6 @@ final class Json
 
     /**
      * Check error.
-     *
      * @return bool
      */
     final public function hasError(): bool
@@ -157,7 +151,6 @@ final class Json
 
     /**
      * Set error.
-     *
      * @return void
      */
     final private function setError()
@@ -172,7 +165,6 @@ final class Json
 
     /**
      * Get error.
-     *
      * @return array
      */
     final public function getError(): array
@@ -185,7 +177,6 @@ final class Json
 
     /**
      * Get error code.
-     *
      * @return int
      */
     final public function getErrorCode(): int
@@ -195,7 +186,6 @@ final class Json
 
     /**
      * Get error message.
-     *
      * @return string
      */
     final public function getErrorMessage(): string
