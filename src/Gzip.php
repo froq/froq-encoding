@@ -98,6 +98,15 @@ final class Gzip
     }
 
     /**
+     * Get data.
+     * @return string
+     */
+    final public function getData(): string
+    {
+        return $this->data;
+    }
+
+    /**
      * Set data minlen.
      * @param int $dataMinlen
      */
@@ -106,6 +115,15 @@ final class Gzip
         $this->dataMinlen = $dataMinlen;
 
         return $this;
+    }
+
+    /**
+     * Get data minlen.
+     * @return int
+     */
+    final public function getDataMinlen(): int
+    {
+        return $this->dataMinlen;
     }
 
     /**
@@ -120,6 +138,15 @@ final class Gzip
     }
 
     /**
+     * Get level.
+     * @return int
+     */
+    final public function getLevel(): int
+    {
+        return $this->level;
+    }
+
+    /**
      * Set mode.
      * @param int $mode
      */
@@ -128,33 +155,6 @@ final class Gzip
         $this->mode = $mode;
 
         return $this;
-    }
-
-    /**
-     * Get data.
-     * @return string
-     */
-    final public function getData(): string
-    {
-        return $this->data;
-    }
-
-    /**
-     * Get data minlen.
-     * @return int
-     */
-    final public function getDataMinlen(): int
-    {
-        return $this->dataMinlen;
-    }
-
-    /**
-     * Get level.
-     * @return int
-     */
-    final public function getLevel(): int
-    {
-        return $this->level;
     }
 
     /**
