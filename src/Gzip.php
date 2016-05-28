@@ -32,11 +32,16 @@ namespace Froq\Encoding;
 final class Gzip
 {
     /**
-     * GZip level & mode.
-     * @const int, int
+     * Default level.
+     * @const int
      */
-    const DEFAULT_LEVEL = -1,
-          DEFAULT_MODE  = FORCE_GZIP;
+    const DEFAULT_LEVEL = -1;
+
+    /**
+     * Default mode.
+     * @const int
+     */
+    const DEFAULT_MODE  = FORCE_GZIP;
 
     /**
      * Data.
@@ -45,25 +50,25 @@ final class Gzip
     private $data;
 
     /**
-     * Data minlen for encoding.
+     * Data minlen.
      * @var int
      */
     private $dataMinlen = 1024;
 
     /**
-     * GZip level.
+     * Level.
      * @var int
      */
     private $level;
 
     /**
-     * GZip mode.
+     * Mode.
      * @var int
      */
     private $mode;
 
     /**
-     * Encoded flag.
+     * Is encoded.
      * @var bool
      */
     private $isEncoded = false;
@@ -71,8 +76,8 @@ final class Gzip
     /**
      * Constructor.
      * @param string $data
-     * @param int     $level
-     * @param int     $mode
+     * @param int    $level
+     * @param int    $mode
      */
     final public function __construct(string $data = null,
         int $level = self::DEFAULT_LEVEL, int $mode = self::DEFAULT_MODE)
@@ -181,7 +186,7 @@ final class Gzip
     }
 
     /**
-     * Decoder.
+     * Decode.
      * @return string
      */
     final public function decode(): string
@@ -195,7 +200,7 @@ final class Gzip
     }
 
     /**
-     * Check is encoded.
+     * Check encoded.
      * @return bool
      */
     final public function isEncoded(): bool
@@ -204,10 +209,10 @@ final class Gzip
     }
 
     /**
-     * Check minlen limit to encode.
+     * Check minlen.
      * @return bool
      */
-    final public function isDataMinlenOK(): bool
+    final public function checkDataMinlen(): bool
     {
         return (strlen($this->data) >= $this->dataMinlen);
     }
