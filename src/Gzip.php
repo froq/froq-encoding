@@ -35,13 +35,13 @@ final class Gzip
      * Default level.
      * @const int
      */
-    const DEFAULT_LEVEL = -1;
+    public const DEFAULT_LEVEL = -1;
 
     /**
      * Default mode.
      * @const int
      */
-    const DEFAULT_MODE  = FORCE_GZIP;
+    public const DEFAULT_MODE  = FORCE_GZIP;
 
     /**
      * Data.
