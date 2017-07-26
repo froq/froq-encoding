@@ -153,7 +153,7 @@ final class Json
      * Set error.
      * @return void
      */
-    private function setError()
+    private function setError(): void
     {
         $this->errorCode = json_last_error();
         if ($this->errorCode) {
