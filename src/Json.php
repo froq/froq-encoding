@@ -66,7 +66,7 @@ final class Json
      * Constructor.
      * @param any $data
      */
-    public final function __construct($data = null)
+    public function __construct($data = null)
     {
         $this->setData($data);
     }
@@ -76,7 +76,7 @@ final class Json
      * @param  any $data
      * @return self
      */
-    public final function setData($data): self
+    public function setData($data): self
     {
         $this->data = $data;
 
@@ -87,7 +87,7 @@ final class Json
      * Get data.
      * @return any
      */
-    public final function getData($data)
+    public function getData($data)
     {
         return $this->data;
     }
@@ -96,7 +96,7 @@ final class Json
      * Encoder.
      * @return string
      */
-    public final function encode(...$args): string
+    public function encode(...$args): string
     {
         if ($this->data === '') {
             return '';
@@ -120,7 +120,7 @@ final class Json
      * Decoder.
      * @return any
      */
-    public final function decode(...$args)
+    public function decode(...$args)
     {
         if ($this->data === '') {
             return null;
@@ -144,7 +144,7 @@ final class Json
      * Check error.
      * @return bool
      */
-    public final function hasError(): bool
+    public function hasError(): bool
     {
         return ($this->errorCode > 0);
     }
@@ -167,7 +167,7 @@ final class Json
      * Get error.
      * @return array
      */
-    public final function getError(): array
+    public function getError(): array
     {
         return [
             'code' => $this->errorCode,
@@ -179,7 +179,7 @@ final class Json
      * Get error code.
      * @return int
      */
-    public final function getErrorCode(): int
+    public function getErrorCode(): int
     {
         return $this->errorCode;
     }
@@ -188,7 +188,7 @@ final class Json
      * Get error message.
      * @return string
      */
-    public final function getErrorMessage(): string
+    public function getErrorMessage(): string
     {
         return $this->errorMessage;
     }

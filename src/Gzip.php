@@ -79,8 +79,8 @@ final class Gzip
      * @param int    $level
      * @param int    $mode
      */
-    public final function __construct(string $data = null,
-        int $level = self::DEFAULT_LEVEL, int $mode = self::DEFAULT_MODE)
+    public function __construct(string $data = null, int $level = self::DEFAULT_LEVEL,
+        int $mode = self::DEFAULT_MODE)
     {
         if (!function_exists('gzencode')) {
             throw new GzipException('GZip module not found!');
@@ -93,7 +93,7 @@ final class Gzip
      * Set data.
      * @param string $data
      */
-    public final function setData(string $data = null): self
+    public function setData(string $data = null): self
     {
         $this->data = (string) $data;
 
@@ -104,7 +104,7 @@ final class Gzip
      * Get data.
      * @return string
      */
-    public final function getData(): string
+    public function getData(): string
     {
         return $this->data;
     }
@@ -113,7 +113,7 @@ final class Gzip
      * Set data minlen.
      * @param int $dataMinlen
      */
-    public final function setDataMinlen(int $dataMinlen): self
+    public function setDataMinlen(int $dataMinlen): self
     {
         $this->dataMinlen = $dataMinlen;
 
@@ -124,7 +124,7 @@ final class Gzip
      * Get data minlen.
      * @return int
      */
-    public final function getDataMinlen(): int
+    public function getDataMinlen(): int
     {
         return $this->dataMinlen;
     }
@@ -133,7 +133,7 @@ final class Gzip
      * Set level.
      * @param int $level
      */
-    public final function setLevel(int $level): self
+    public function setLevel(int $level): self
     {
         $this->level = $level;
 
@@ -144,7 +144,7 @@ final class Gzip
      * Get level.
      * @return int
      */
-    public final function getLevel(): int
+    public function getLevel(): int
     {
         return $this->level;
     }
@@ -153,7 +153,7 @@ final class Gzip
      * Set mode.
      * @param int $mode
      */
-    public final function setMode(int $mode): self
+    public function setMode(int $mode): self
     {
         $this->mode = $mode;
 
@@ -164,7 +164,7 @@ final class Gzip
      * Get mode.
      * @return int
      */
-    public final function getMode(): int
+    public function getMode(): int
     {
         return $this->mode;
     }
@@ -173,7 +173,7 @@ final class Gzip
      * Encode.
      * @return string
      */
-    public final function encode(): string
+    public function encode(): string
     {
         if (!$this->isEncoded) {
             $this->isEncoded = true;
@@ -187,7 +187,7 @@ final class Gzip
      * Decode.
      * @return string
      */
-    public final function decode(): string
+    public function decode(): string
     {
         if ($this->isEncoded) {
             $this->isEncoded = false;
@@ -201,7 +201,7 @@ final class Gzip
      * Check encoded.
      * @return bool
      */
-    public final function isEncoded(): bool
+    public function isEncoded(): bool
     {
         return $this->isEncoded;
     }
@@ -210,7 +210,7 @@ final class Gzip
      * Check minlen.
      * @return bool
      */
-    public final function checkDataMinlen(): bool
+    public function checkDataMinlen(): bool
     {
         return strlen($this->data) >= $this->dataMinlen;
     }
