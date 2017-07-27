@@ -93,67 +93,71 @@ final class Json
     }
 
     /**
-     * Encoder.
-     * @return string
+     * Encode.
+     * @param  ...$arguments
+     * @return ?string
      */
-    public function encode(...$args): string
+    public function encode(...$arguments): ?string
     {
         if ($this->data === '') {
             return '';
         }
 
         // remove useless second arg if empty
-        $args = array_filter($args);
+        $arguments = array_filter($arguments);
 
         // add data as first arg
-        array_unshift($args, $this->data);
+        array_unshift($arguments, $this->data);
 
-        $return = call_user_func_array('json_encode', $args);
+        $return = call_user_func_array('json_encode', $arguments);
+
+        $this->checkError();
+
         if ($return === false) {
-            $this->setError();
-        }
-
-        return (string) $return;
-    }
-
-    /**
-     * Decoder.
-     * @return any
-     */
-    public function decode(...$args)
-    {
-        if ($this->data === '') {
             return null;
-        }
-
-        // remove useless second arg if empty
-        $args = array_filter($args);
-
-        // add data as first arg
-        array_unshift($args, $this->data);
-
-        $return = call_user_func_array('json_decode', $args);
-        if (json_last_error()) {
-            $this->setError();
         }
 
         return $return;
     }
 
     /**
-     * Check error.
+     * Decode.
+     * @param  ...$arguments
+     * @return any
+     */
+    public function decode(...$arguments)
+    {
+        if ($this->data === '') {
+            return null;
+        }
+
+        // remove useless second arg if empty
+        $arguments = array_filter($arguments);
+
+        // add data as first arg
+        array_unshift($arguments, $this->data);
+
+        $return = call_user_func_array('json_decode', $arguments);
+
+        $this->checkError();
+
+        return $return;
+    }
+
+    /**
+     * Has error.
      * @return bool
      */
     public function hasError(): bool
     {
-        return ($this->errorCode > 0);
+        return $this->errorCode > 0;
     }
 
     /**
-     * Set error.
+     * Check error.
      * @return void
      */
-    private function setError(): void
+    private function checkError(): void
     {
         $this->errorCode = json_last_error();
         if ($this->errorCode) {
