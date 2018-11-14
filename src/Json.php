@@ -41,26 +41,13 @@ final class Json
      * Error code.
      * @var int
      */
-    private $errorCode = 0;
+    private $errorCode;
 
     /**
      * Error message.
      * @var string
      */
-    private $errorMessage = '';
-
-    /**
-     * Error message map.
-     * @var array
-     */
-    private static $errorMessages = [
-        JSON_ERROR_NONE           => '',
-        JSON_ERROR_DEPTH          => 'Maximum stack depth exceeded',
-        JSON_ERROR_STATE_MISMATCH => 'State mismatch (invalid or malformed JSON)',
-        JSON_ERROR_CTRL_CHAR      => 'Unexpected control character found',
-        JSON_ERROR_SYNTAX         => 'Syntax error, malformed JSON',
-        JSON_ERROR_UTF8           => 'Malformed UTF-8 characters, possibly incorrectly encoded',
-    ];
+    private $errorMessage;
 
     /**
      * Constructor.
@@ -99,14 +86,15 @@ final class Json
      */
     public function encode(...$arguments): ?string
     {
+        // skip empty strings
         if ($this->data === '') {
-            return '';
+            return '""';
         }
 
-        // remove useless second arg if empty
+        // remove useless second argument if empty
         $arguments = array_filter($arguments);
 
-        // add data as first arg
+        // add data as first argument
         array_unshift($arguments, $this->data);
 
         $return = call_user_func_array('json_encode', $arguments);
@@ -127,14 +115,15 @@ final class Json
      */
     public function decode(...$arguments)
     {
+        // skip empty strings that cause "Syntax error"
         if ($this->data === '') {
             return null;
         }
 
-        // remove useless second arg if empty
+        // remove useless second argument if empty
         $arguments = array_filter($arguments);
 
-        // add data as first arg
+        // add data as first argument
         array_unshift($arguments, $this->data);
 
         $return = call_user_func_array('json_decode', $arguments);
@@ -154,46 +143,42 @@ final class Json
     }
 
     /**
-     * Check error.
-     * @return void
-     */
-    private function checkError(): void
-    {
-        $this->errorCode = json_last_error();
-        if ($this->errorCode) {
-            $this->errorMessage = isset(self::$errorMessages[$this->errorCode])
-                ? self::$errorMessages[$this->errorCode]
-                : 'unknown error'; // default
-        }
-    }
-
-    /**
      * Get error.
      * @return array
      */
     public function getError(): array
     {
-        return [
-            'code' => $this->errorCode,
-            'message' => $this->errorMessage,
-        ];
+        return ['code' => $this->errorCode, 'message' => $this->errorMessage];
     }
 
     /**
      * Get error code.
-     * @return int
+     * @return ?int
      */
-    public function getErrorCode(): int
+    public function getErrorCode(): ?int
     {
         return $this->errorCode;
     }
 
     /**
      * Get error message.
-     * @return string
+     * @return ?string
      */
-    public function getErrorMessage(): string
+    public function getErrorMessage(): ?string
     {
         return $this->errorMessage;
+    }
+
+    /**
+     * Check error.
+     * @return void
+     */
+    private function checkError(): void
+    {
+        $errorCode = json_last_error();
+        if ($errorCode > 0) {
+            $this->errorCode = $errorCode;
+            $this->errorMessage = json_last_error_msg() ?: 'Unknown error';
+        }
     }
 }
