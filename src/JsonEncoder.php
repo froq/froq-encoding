@@ -84,12 +84,13 @@ final class JsonEncoder extends Encoder implements EncoderInterface
      */
     public function decode($data)
     {
-        // skip empty strings that cause "Syntax error"
+        // skip empty strings (that cause "Syntax error"?)
         if ($data === '') {
             return null;
         }
 
-        $data = json_decode($data, $this->options['assoc'], $this->options['depth'], $this->options['flags']);
+        $data = json_decode((string) $data, $this->options['assoc'], $this->options['depth'],
+            $this->options['flags']);
         if (json_last_error() > 0) {
             $data = null;
             $this->error = json_last_error_msg() ?: 'Unknown error';
