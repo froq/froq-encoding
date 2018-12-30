@@ -71,7 +71,7 @@ final class JsonEncoder extends Encoder implements EncoderInterface
         $data = json_encode($data, $this->options['flags'], $this->options['depth']);
         if (json_last_error() > 0) {
             $data = null;
-            $this->error = json_last_error_msg() ?: 'Unknown error';
+            $this->error = json_last_error_msg() ?: 'Unknown';
         }
 
         return $data;
@@ -93,7 +93,7 @@ final class JsonEncoder extends Encoder implements EncoderInterface
             $this->options['flags']);
         if (json_last_error() > 0) {
             $data = null;
-            $this->error = json_last_error_msg() ?: 'Unknown error';
+            $this->error = json_last_error_msg() ?: 'Unknown';
         }
 
         return $data;
