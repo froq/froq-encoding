@@ -36,6 +36,13 @@ namespace Froq\Encoding;
 abstract class Encoder
 {
     /**
+     * Names.
+     * @const string
+     */
+    public const NAME_JSON = 'json',
+                 NAME_GZIP = 'gzip';
+
+    /**
      * Options.
      * @var array
      */
@@ -103,10 +110,10 @@ abstract class Encoder
     public static final function init(string $name, array $options = []): EncoderInterface
     {
         switch ($name) {
-            case 'json': return new JsonEncoder($options);
-            case 'gzip': return new GzipEncoder($options);
+            case self::NAME_JSON: return new JsonEncoder($options);
+            case self::NAME_GZIP: return new GzipEncoder($options);
         }
 
-        throw new EncoderException("Unimplemented encoder {$name}!");
+        throw new EncoderException("Unimplemented encoder '{$name}' given");
     }
 }

@@ -43,7 +43,7 @@ final class JsonEncoder extends Encoder implements EncoderInterface
     public function __construct(array $options = [])
     {
         if (!function_exists('json_encode')) {
-            throw new EncoderException('JSON module not found!');
+            throw new EncoderException('JSON module not found');
         }
 
         // set defaults
