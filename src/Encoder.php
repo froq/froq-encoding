@@ -88,7 +88,7 @@ abstract class Encoder
      */
     public final function hasError(): bool
     {
-        return !empty($this->error);
+        return $this->error != null;
     }
 
     /**
