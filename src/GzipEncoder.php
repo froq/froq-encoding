@@ -64,8 +64,8 @@ final class GzipEncoder extends Encoder implements EncoderInterface
     public function encode($data)
     {
         if ($data !== null) {
-            $data = gzencode($data, $this->options['level'], $this->options['mode']);
-            if ($data === false) { // error?
+            $data = gzencode((string) $data, $this->options['level'], $this->options['mode']);
+            if ($data === false) {
                 $data = null;
                 $this->error = error_get_last()['message'] ?? 'Unknown';
             }
@@ -82,8 +82,8 @@ final class GzipEncoder extends Encoder implements EncoderInterface
     public function decode($data)
     {
         if ($data !== null) {
-            $data = gzdecode($data, $this->options['length']);
-            if ($data === false) { // error?
+            $data = gzdecode((string) $data, $this->options['length']);
+            if ($data === false) {
                 $data = null;
                 $this->error = error_get_last()['message'] ?? 'Unknown';
             }
