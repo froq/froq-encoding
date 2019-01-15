@@ -48,8 +48,8 @@ final class GzipEncoder extends Encoder implements EncoderInterface
 
         // set defaults
         $options = [
-            'level' => (int) ($options['level'] ?? -1),
-            'mode' => (int) ($options['mode'] ?? FORCE_GZIP),
+            'level'  => (int) ($options['level'] ?? -1),
+            'mode'   => (int) ($options['mode'] ?? FORCE_GZIP),
             'length' => (int) ($options['length'] ?? PHP_INT_MAX)
         ];
 
