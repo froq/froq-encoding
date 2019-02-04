@@ -107,7 +107,7 @@ abstract class Encoder
      * @return Froq\Encoding\EncoderInterface
      * @throws Froq\Encoding\EncoderException
      */
-    public static final function init(string $name, array $options = []): EncoderInterface
+    public static final function init(string $name, array $options = null): EncoderInterface
     {
         switch ($name) {
             case self::NAME_JSON: return new JsonEncoder($options);
@@ -115,5 +115,61 @@ abstract class Encoder
         }
 
         throw new EncoderException("Unimplemented encoder '{$name}' given");
+    }
+
+    /**
+     * Json encode.
+     * @param  any        $data
+     * @param  array|null $options
+     * @return array
+     */
+    public static final function jsonEncode($data, array $options = null): array
+    {
+        $encoder = new JsonEncoder($options);
+
+        return [$encoder->encode($data), $encoder->hasError()
+            ? new EncoderException('JSON Error: '. $encoder->getError()) : null];
+    }
+
+    /**
+     * Json decode.
+     * @param  any        $data
+     * @param  array|null $options
+     * @return array
+     */
+    public static final function jsonDecode($data, array $options = null): array
+    {
+        $encoder = new JsonEncoder($options);
+
+        return [$encoder->decode($data), $encoder->hasError()
+            ? new EncoderException('JSON Error: '. $encoder->getError()) : null];
+    }
+
+    /**
+     * Gzip encode.
+     * @param  ?string     $data
+     * @param  array|null $options
+     * @return ?string
+     */
+    public static final function gzipEncode($data, array $options = null): array
+    {
+        $encoder = new GzipEncoder($options);
+
+        return [$encoder->encode($data), $encoder->hasError()
+            ? new EncoderException('GZip Error: '. $encoder->getError()) : null];
+    }
+
+    /**
+     * Gzip decode.
+     * @param  ?string     $data
+     * @param  array|null $options
+     * @return ?string
+     */
+    public static final function gzipDecode($data, array $options = null): array
+    {
+        $encoder = new GzipEncoder($options);
+
+        return [$encoder->decode($data), $encoder->hasError()
+            ? new EncoderException('GZip Error: '. $encoder->getError()) : null];
     }
 }
