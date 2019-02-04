@@ -58,7 +58,7 @@ final class JsonEncoder extends Encoder implements EncoderInterface
 
     /**
      * Encode.
-     * @param  ?string $data
+     * @param  ?any $data
      * @return ?string
      */
     public function encode($data)
