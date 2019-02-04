@@ -37,10 +37,10 @@ final class GzipEncoder extends Encoder implements EncoderInterface
 {
     /**
      * Cconstructor.
-     * @param  array $options
+     * @param  array|null $options
      * @throws Froq\Encoding\EncoderException
      */
-    public function __construct(array $options = [])
+    public function __construct(array $options = null)
     {
         if (!function_exists('gzencode')) {
             throw new EncoderException('GZip module not found');

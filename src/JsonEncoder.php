@@ -37,10 +37,10 @@ final class JsonEncoder extends Encoder implements EncoderInterface
 {
     /**
      * Cconstructor.
-     * @param  array $options
+     * @param  array|null $options
      * @throws Froq\Encoding\EncoderException
      */
-    public function __construct(array $options = [])
+    public function __construct(array $options = null)
     {
         if (!function_exists('json_encode')) {
             throw new EncoderException('JSON module not found');
