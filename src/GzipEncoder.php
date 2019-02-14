@@ -24,21 +24,21 @@
  */
 declare(strict_types=1);
 
-namespace Froq\Encoding;
+namespace froq\encoding;
 
 /**
- * @package    Froq
- * @subpackage Froq\Encoding
- * @object     Froq\Encoding\GzipEncoder
- * @author     Kerem Güneş <k-gun@mail.com>
- * @since      3.0
+ * Gzip Encoder.
+ * @package froq\encoding
+ * @object  froq\encoding\GzipEncoder
+ * @author  Kerem Güneş <k-gun@mail.com>
+ * @since   3.0
  */
 final class GzipEncoder extends Encoder implements EncoderInterface
 {
     /**
      * Cconstructor.
      * @param  array|null $options
-     * @throws Froq\Encoding\EncoderException
+     * @throws froq\encoding\EncoderException
      */
     public function __construct(array $options = null)
     {

@@ -24,14 +24,14 @@
  */
 declare(strict_types=1);
 
-namespace Froq\Encoding;
+namespace froq\encoding;
 
 /**
- * @package    Froq
- * @subpackage Froq\Encoding
- * @object     Froq\Encoding\EncoderException
- * @author     Kerem Güneş <k-gun@mail.com>
- * @since      3.0
+ * Encoder Exception.
+ * @package froq\encoding
+ * @object  froq\encoding\EncoderException
+ * @author  Kerem Güneş <k-gun@mail.com>
+ * @since   3.0
  */
 final class EncoderException extends \Exception
 {}

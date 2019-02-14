@@ -24,14 +24,14 @@
  */
 declare(strict_types=1);
 
-namespace Froq\Encoding;
+namespace froq\encoding;
 
 /**
- * @package    Froq
- * @subpackage Froq\Encoding
- * @object     Froq\Encoding\Encoder
- * @author     Kerem Güneş <k-gun@mail.com>
- * @since      3.0
+ * Encoder.
+ * @package froq\encoding
+ * @object  froq\encoding\Encoder
+ * @author  Kerem Güneş <k-gun@mail.com>
+ * @since   3.0
  */
 abstract class Encoder
 {
@@ -104,8 +104,8 @@ abstract class Encoder
      * Init.
      * @param  string $name
      * @param  array  $options
-     * @return Froq\Encoding\EncoderInterface
-     * @throws Froq\Encoding\EncoderException
+     * @return froq\encoding\EncoderInterface
+     * @throws froq\encoding\EncoderException
      */
     public static final function init(string $name, array $options = null): EncoderInterface
     {

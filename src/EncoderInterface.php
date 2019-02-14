@@ -24,14 +24,14 @@
  */
 declare(strict_types=1);
 
-namespace Froq\Encoding;
+namespace froq\encoding;
 
 /**
- * @package    Froq
- * @subpackage Froq\Encoding
- * @object     Froq\Encoding\EncoderInterface
- * @author     Kerem Güneş <k-gun@mail.com>
- * @since      3.0
+ * Encoder Interface.
+ * @package froq\encoding
+ * @object  froq\encoding\EncoderInterface
+ * @author  Kerem Güneş <k-gun@mail.com>
+ * @since   3.0
  */
 interface EncoderInterface
 {
