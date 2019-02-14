@@ -27,7 +27,7 @@ declare(strict_types=1);
 namespace froq\encoding;
 
 /**
- * Encoder Interface.
+ * Encoder interface.
  * @package froq\encoding
  * @object  froq\encoding\EncoderInterface
  * @author  Kerem Güneş <k-gun@mail.com>

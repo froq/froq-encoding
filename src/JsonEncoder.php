@@ -27,7 +27,7 @@ declare(strict_types=1);
 namespace froq\encoding;
 
 /**
- * Json Encoder.
+ * Json encoder.
  * @package froq\encoding
  * @object  froq\encoding\JsonEncoder
  * @author  Kerem Güneş <k-gun@mail.com>

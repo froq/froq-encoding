@@ -27,7 +27,7 @@ declare(strict_types=1);
 namespace froq\encoding;
 
 /**
- * Encoder Exception.
+ * Encoder exception.
  * @package froq\encoding
  * @object  froq\encoding\EncoderException
  * @author  Kerem Güneş <k-gun@mail.com>

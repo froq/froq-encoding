@@ -27,7 +27,7 @@ declare(strict_types=1);
 namespace froq\encoding;
 
 /**
- * Gzip Encoder.
+ * Gzip encoder.
  * @package froq\encoding
  * @object  froq\encoding\GzipEncoder
  * @author  Kerem Güneş <k-gun@mail.com>
