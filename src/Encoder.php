@@ -33,7 +33,7 @@ namespace froq\encoding;
  * @author  Kerem Güneş <k-gun@mail.com>
  * @since   3.0
  */
-abstract class Encoder
+abstract class Encoder implements EncoderInterface
 {
     /**
      * Names.

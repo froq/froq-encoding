@@ -33,7 +33,7 @@ namespace froq\encoding;
  * @author  Kerem Güneş <k-gun@mail.com>
  * @since   3.0
  */
-final class GzipEncoder extends Encoder implements EncoderInterface
+final class GzipEncoder extends Encoder
 {
     /**
      * Cconstructor.
