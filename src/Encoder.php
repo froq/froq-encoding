@@ -88,7 +88,7 @@ abstract class Encoder implements EncoderInterface
      */
     public final function hasError(): bool
     {
-        return $this->error != null;
+        return ($this->error != null);
     }
 
     /**
@@ -114,7 +114,7 @@ abstract class Encoder implements EncoderInterface
             case self::NAME_GZIP: return new GzipEncoder($options);
         }
 
-        throw new EncoderException("Unimplemented encoder '{$name}' given");
+        throw new EncoderException("Unimplemented encoder name '{$name}' given");
     }
 
     /**
@@ -127,8 +127,7 @@ abstract class Encoder implements EncoderInterface
     {
         $encoder = new JsonEncoder($options);
 
-        return [$encoder->encode($data), $encoder->hasError()
-            ? new EncoderException('JSON Error: '. $encoder->getError()) : null];
+        return [$encoder->encode($data), $encoder->hasError() ? 'JSON Error: '. $encoder->getError() : null];
     }
 
     /**
@@ -141,8 +140,7 @@ abstract class Encoder implements EncoderInterface
     {
         $encoder = new JsonEncoder($options);
 
-        return [$encoder->decode($data), $encoder->hasError()
-            ? new EncoderException('JSON Error: '. $encoder->getError()) : null];
+        return [$encoder->decode($data), $encoder->hasError() ? 'JSON Error: '. $encoder->getError() : null];
     }
 
     /**
@@ -155,8 +153,7 @@ abstract class Encoder implements EncoderInterface
     {
         $encoder = new GzipEncoder($options);
 
-        return [$encoder->encode($data), $encoder->hasError()
-            ? new EncoderException('GZip Error: '. $encoder->getError()) : null];
+        return [$encoder->encode($data), $encoder->hasError() ? 'GZip Error: '. $encoder->getError() : null];
     }
 
     /**
@@ -169,7 +166,6 @@ abstract class Encoder implements EncoderInterface
     {
         $encoder = new GzipEncoder($options);
 
-        return [$encoder->decode($data), $encoder->hasError()
-            ? new EncoderException('GZip Error: '. $encoder->getError()) : null];
+        return [$encoder->decode($data), $encoder->hasError() ? 'GZip Error: '. $encoder->getError() : null];
     }
 }
