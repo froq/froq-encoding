@@ -50,7 +50,7 @@ abstract class Encoder
      * @var   string
      * @since 4.0
      */
-    protected $type;
+    protected string $type;
 
     /**
      * Data.
