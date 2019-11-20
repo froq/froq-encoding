@@ -26,75 +26,100 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
+use froq\encoding\{Encoder, EncoderInterface, EncoderError, EncoderException};
+use Throwable;
+
 /**
- * Json encoder.
+ * Json Encoder.
  * @package froq\encoding
  * @object  froq\encoding\JsonEncoder
  * @author  Kerem Güneş <k-gun@mail.com>
  * @since   3.0
  */
-final class JsonEncoder extends Encoder
+final class JsonEncoder extends Encoder implements EncoderInterface
 {
     /**
-     * Cconstructor.
-     * @param  array|null $options
-     * @throws froq\encoding\EncoderException
+     * Constructor.
+     * @param  any $data
+     * @throws froq\encoding\EncoderException If JSON module not found.
      */
-    public function __construct(array $options = null)
+    public function __construct($data)
     {
         if (!function_exists('json_encode')) {
             throw new EncoderException('JSON module not found');
         }
 
-        // set defaults
-        $options = [
-            'flags' => (int) ($options['flags'] ?? 0),
-            'depth' => (int) ($options['depth'] ?? 512),
-            'assoc' => (bool) ($options['assoc'] ?? false)
-        ];
-
-        parent::__construct($options);
+        parent::__construct(Encoder::TYPE_JSON, $data);
     }
 
     /**
-     * Encode.
-     * @param  ?any $data
-     * @return ?string
+     * @inheritDoc froq\encoding\EncoderInterface
      */
-    public function encode($data)
+    public function encode(array $options = null, EncoderError &$error = null)
     {
-        // skip empty strings
-        if ($data === '') {
+        $data = $this->data;
+        if ($data === '') { // skip empty strings
             return '""';
         }
 
-        $data = json_encode($data, $this->options['flags'], $this->options['depth']);
-        if (json_last_error() > 0) {
+        try {
+            $data = json_encode($data,
+                (int) ($options['flags'] ?? 0),
+                (int) ($options['depth'] ?? 512)
+            );
+
+            if (json_last_error()) {
+                $data = null;
+                $error = new EncoderError(json_last_error_msg() ?: 'Unknown',
+                    EncoderError::TYPE_JSON);
+
+            }
+        } catch (Throwable $e) {
             $data = null;
-            $this->error = json_last_error_msg() ?: 'Unknown';
+            $error = new EncoderError($e->getMessage(), EncoderError::TYPE_JSON);
         }
 
         return $data;
     }
 
     /**
-     * Decode.
-     * @param  ?string $data
-     * @return ?any
+     * @inheritDoc froq\encoding\EncoderInterface
      */
-    public function decode($data)
+    public function decode(array $options = null, EncoderError &$error = null)
     {
-        $data = (string) $data;
-        // skip empty strings (that cause "Syntax error"?)
-        if ($data === '') {
+        $data = $this->data;
+
+        if (!is_string($data)) {
+            $error = new EncoderError(sprintf('String data needed for %s(), %s given',
+                __method__, gettype($data)));
             return null;
         }
 
-        $data = json_decode($data, $this->options['assoc'], $this->options['depth'],
-            $this->options['flags']);
-        if (json_last_error() > 0) {
+        if ($data === '') { // skip empty strings (that already null)
+            return null;
+        }
+
+        // if 'false' given with JSON_OBJECT_AS_ARRAY in flags, simply 'false' overrides on..
+        $options['assoc'] = $options['assoc'] ?? null;
+        if ($options['assoc'] !== null) {
+            $options['assoc'] = (bool) $options['assoc'];
+        }
+
+        try {
+            $data = json_decode($data,
+                       $options['assoc'],
+                (int) ($options['depth'] ?? 512),
+                (int) ($options['flags'] ?? 0)
+            );
+
+            if (json_last_error()) {
+                $data = null;
+                $error = new EncoderError(json_last_error_msg() ?: 'Unknown',
+                    EncoderError::TYPE_JSON);
+            }
+        } catch (Throwable $e) {
             $data = null;
-            $this->error = json_last_error_msg() ?: 'Unknown';
+            $error = new EncoderError($e->getMessage(), EncoderError::TYPE_JSON);
         }
 
         return $data;

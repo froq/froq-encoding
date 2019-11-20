@@ -26,48 +26,55 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
+use froq\encoding\{Encoder, EncoderInterface, EncoderError, EncoderException};
+use Throwable;
+
 /**
- * Gzip encoder.
+ * Gzip Encoder.
  * @package froq\encoding
  * @object  froq\encoding\GzipEncoder
  * @author  Kerem Güneş <k-gun@mail.com>
  * @since   3.0
  */
-final class GzipEncoder extends Encoder
+final class GzipEncoder extends Encoder implements EncoderInterface
 {
     /**
-     * Cconstructor.
-     * @param  array|null $options
-     * @throws froq\encoding\EncoderException
+     * Constructor.
+     * @param  any $data
+     * @throws froq\encoding\EncoderException If GZip module not found.
      */
-    public function __construct(array $options = null)
+    public function __construct($data)
     {
-        if (!function_exists('gzencode')) {
-            throw new EncoderException('GZip module not found');
-        }
-
-        // set defaults
-        $options = [
-            'level'  => (int) ($options['level'] ?? -1),
-            'mode'   => (int) ($options['mode'] ?? FORCE_GZIP),
-            'length' => (int) ($options['length'] ?? PHP_INT_MAX)
-        ];
-
-        parent::__construct($options);
+        parent::__construct(Encoder::TYPE_GZIP, $data);
     }
 
     /**
-     * Encode.
-     * @param  ?string $data
-     * @return ?string
+     * @inheritDoc froq\encoding\EncoderInterface
      */
-    public function encode($data)
+    public function encode(array $options = null, EncoderError &$error = null)
     {
-        if ($data !== null) {
-            $data = gzencode((string) $data, $this->options['level'], $this->options['mode']);
-            if ($data === false) {
+        $data = $this->data;
+
+        if (!is_string($data)) {
+            $error = new EncoderError(sprintf('String data needed for %s(), %s given',
+                __method__, gettype($data)));
+            return null;
+        }
+
+        if ($data != '') {
+            try {
+                $data = gzencode($data,
+                    (int) ($options['level'] ?? -1),
+                    (int) ($options['mode'] ?? FORCE_GZIP)
+                );
+
+                if ($data === false) {
+                    $data = null;
+                    $error = new EncoderError(error(), EncoderError::TYPE_GZIP);
+                }
+            } catch (Throwable $e) {
                 $data = null;
-                $this->error = error_get_last()['message'] ?? 'Unknown';
+                $error = new EncoderError($e->getMessage(), EncoderError::TYPE_GZIP);
             }
         }
 
@@ -75,17 +82,31 @@ final class GzipEncoder extends Encoder
     }
 
     /**
-     * Decode.
-     * @param  ?string $data
-     * @return ?string
+     * @inheritDoc froq\encoding\EncoderInterface
      */
-    public function decode($data)
+    public function decode(array $options = null, EncoderError &$error = null)
     {
-        if ($data !== null) {
-            $data = gzdecode((string) $data, $this->options['length']);
-            if ($data === false) {
+        $data = $this->data;
+
+        if (!is_string($data)) {
+            $error = new EncoderError(sprintf('String data needed for %s(), %s given',
+                __method__, gettype($data)));
+            return null;
+        }
+
+        if ($data != '') {
+            try {
+                $data = gzdecode($data,
+                    (int) ($options['length'] ?? 0)
+                );
+
+                if ($data === false) {
+                    $data = null;
+                    $error = new EncoderError(error(), EncoderError::TYPE_GZIP);
+                }
+            } catch (Throwable $e) {
                 $data = null;
-                $this->error = error_get_last()['message'] ?? 'Unknown';
+                $error = new EncoderError($e->getMessage(), EncoderError::TYPE_GZIP);
             }
         }
 
