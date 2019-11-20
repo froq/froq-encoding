@@ -26,6 +26,8 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
+use froq\encoding\Util as EncodingUtil;
+
 /**
  * Encoder.
  * @package froq\encoding
@@ -33,139 +35,68 @@ namespace froq\encoding;
  * @author  Kerem Güneş <k-gun@mail.com>
  * @since   3.0
  */
-abstract class Encoder implements EncoderInterface
+abstract class Encoder
 {
     /**
      * Names.
      * @const string
      */
-    public const NAME_JSON = 'json',
-                 NAME_GZIP = 'gzip';
+    public const TYPE_JSON = 'json',
+                 TYPE_XML  = 'xml',
+                 TYPE_GZIP = 'gzip';
 
     /**
-     * Options.
-     * @var array
+     * Type.
+     * @var   string
+     * @since 4.0
      */
-    protected $options = [];
+    protected $type;
 
     /**
-     * Error.
-     * @var string
+     * Data.
+     * @var   any
+     * @since 4.0
      */
-    protected $error;
+    protected $data;
 
     /**
      * Constructor.
-     * @param array $options
+     * @param string $type
+     * @param any    $data
      */
-    public function __construct(array $options = [])
+    public function __construct(string $type, $data)
     {
-        $this->setOptions($options);
+        $this->type = $type;
+        $this->data = $data;
     }
 
     /**
-     * Set options.
-     * @param  array $options
-     * @return void
+     * Type.
+     * @return string
+     * @since  4.0
      */
-    public final function setOptions(array $options): void
+    public final function type(): string
     {
-        $this->options = array_merge($this->options, $options);
+        return $this->type;
     }
 
     /**
-     * Get options.
-     * @return array
+     * Data.
+     * @return any
+     * @since  4.0
      */
-    public final function getOptions(): array
+    public final function data()
     {
-        return $this->options;
+        return $this->data;
     }
 
     /**
-     * Has error.
+     * Is encoded.
      * @return bool
+     * @since  4.0
      */
-    public final function hasError(): bool
+    public final function isEncoded(): bool
     {
-        return ($this->error != null);
-    }
-
-    /**
-     * Get error.
-     * @return ?string
-     */
-    public final function getError(): ?string
-    {
-        return $this->error;
-    }
-
-    /**
-     * Init.
-     * @param  string $name
-     * @param  array  $options
-     * @return froq\encoding\EncoderInterface
-     * @throws froq\encoding\EncoderException
-     */
-    public static final function init(string $name, array $options = null): EncoderInterface
-    {
-        switch ($name) {
-            case self::NAME_JSON: return new JsonEncoder($options);
-            case self::NAME_GZIP: return new GzipEncoder($options);
-        }
-
-        throw new EncoderException("Unimplemented encoder name '{$name}' given");
-    }
-
-    /**
-     * Json encode.
-     * @param  any        $data
-     * @param  array|null $options
-     * @return array
-     */
-    public static final function jsonEncode($data, array $options = null): array
-    {
-        $encoder = new JsonEncoder($options);
-
-        return [$encoder->encode($data), $encoder->hasError() ? 'JSON Error: '. $encoder->getError() : null];
-    }
-
-    /**
-     * Json decode.
-     * @param  any        $data
-     * @param  array|null $options
-     * @return array
-     */
-    public static final function jsonDecode($data, array $options = null): array
-    {
-        $encoder = new JsonEncoder($options);
-
-        return [$encoder->decode($data), $encoder->hasError() ? 'JSON Error: '. $encoder->getError() : null];
-    }
-
-    /**
-     * Gzip encode.
-     * @param  ?string     $data
-     * @param  array|null $options
-     * @return ?string
-     */
-    public static final function gzipEncode($data, array $options = null): array
-    {
-        $encoder = new GzipEncoder($options);
-
-        return [$encoder->encode($data), $encoder->hasError() ? 'GZip Error: '. $encoder->getError() : null];
-    }
-
-    /**
-     * Gzip decode.
-     * @param  ?string     $data
-     * @param  array|null $options
-     * @return ?string
-     */
-    public static final function gzipDecode($data, array $options = null): array
-    {
-        $encoder = new GzipEncoder($options);
-
-        return [$encoder->decode($data), $encoder->hasError() ? 'GZip Error: '. $encoder->getError() : null];
+        return EncodingUtil::isEncoded($this->type, $this->data);
     }
 }
