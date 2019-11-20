@@ -26,12 +26,14 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
+use froq\Exception;
+
 /**
- * Encoder exception.
+ * Encoder Exception.
  * @package froq\encoding
  * @object  froq\encoding\EncoderException
  * @author  Kerem Güneş <k-gun@mail.com>
  * @since   3.0
  */
-final class EncoderException extends \Exception
+final class EncoderException extends Exception
 {}
