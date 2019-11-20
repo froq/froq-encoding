@@ -26,8 +26,10 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
+use froq\encoding\EncoderError;
+
 /**
- * Encoder interface.
+ * Encoder Interface.
  * @package froq\encoding
  * @object  froq\encoding\EncoderInterface
  * @author  Kerem Güneş <k-gun@mail.com>
@@ -37,15 +39,17 @@ interface EncoderInterface
 {
     /**
      * Encode.
-     * @param  any $data
+     * @param  array|null $options
+     * @param  froq\encoding\EncoderError|null &$error
      * @return any
      */
-    public function encode($data);
+    public function encode(array $options = null, EncoderError &$error = null);
 
     /**
      * Decode.
-     * @param  any $data
+     * @param  array|null $options
+     * @param  froq\encoding\EncoderError|null &$error
      * @return any
      */
-    public function decode($data);
+    public function decode(array $options = null, EncoderError &$error = null);
 }
