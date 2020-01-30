@@ -45,6 +45,10 @@ final class GzipEncoder extends Encoder implements EncoderInterface
      */
     public function __construct($data)
     {
+        if (!function_exists('gzencode')) {
+            throw new EncoderException('GZip module not found');
+        }
+
         parent::__construct(Encoder::TYPE_GZIP, $data);
     }
 
