@@ -41,12 +41,12 @@ final class JsonEncoder extends Encoder implements EncoderInterface
     /**
      * Constructor.
      * @param  any $data
-     * @throws froq\encoding\EncoderException If JSON module not found.
+     * @throws froq\encoding\EncoderException If json module not loaded.
      */
     public function __construct($data)
     {
-        if (!function_exists('json_encode')) {
-            throw new EncoderException('JSON module not found');
+        if (!extension_loaded('json')) {
+            throw new EncoderException('json module not loaded');
         }
 
         parent::__construct(Encoder::TYPE_JSON, $data);

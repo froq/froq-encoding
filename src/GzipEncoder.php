@@ -41,12 +41,12 @@ final class GzipEncoder extends Encoder implements EncoderInterface
     /**
      * Constructor.
      * @param  any $data
-     * @throws froq\encoding\EncoderException If GZip module not found.
+     * @throws froq\encoding\EncoderException If zlib module not loaded.
      */
     public function __construct($data)
     {
-        if (!function_exists('gzencode')) {
-            throw new EncoderException('GZip module not found');
+        if (!extension_loaded('zlib')) {
+            throw new EncoderException('zlib module not loaded');
         }
 
         parent::__construct(Encoder::TYPE_GZIP, $data);
