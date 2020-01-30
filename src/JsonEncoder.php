@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
-use froq\encoding\{Encoder, EncoderInterface, EncoderError, EncoderException};
+use froq\encoding\{Encoder, EncoderInterface, EncoderError, EncodingException};
 use Throwable;
 
 /**
@@ -41,12 +41,12 @@ final class JsonEncoder extends Encoder implements EncoderInterface
     /**
      * Constructor.
      * @param  any $data
-     * @throws froq\encoding\EncoderException If json module not loaded.
+     * @throws froq\encoding\EncodingException If json module not loaded.
      */
     public function __construct($data)
     {
         if (!extension_loaded('json')) {
-            throw new EncoderException('json module not loaded');
+            throw new EncodingException('json module not loaded');
         }
 
         parent::__construct(Encoder::TYPE_JSON, $data);

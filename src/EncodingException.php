@@ -29,11 +29,11 @@ namespace froq\encoding;
 use froq\common\Exception;
 
 /**
- * Encoder Exception.
+ * Encoding Exception.
  * @package froq\encoding
- * @object  froq\encoding\EncoderException
+ * @object  froq\encoding\EncodingException
  * @author  Kerem Güneş <k-gun@mail.com>
  * @since   3.0
  */
-final class EncoderException extends Exception
+final class EncodingException extends Exception
 {}

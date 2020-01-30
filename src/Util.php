@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
-use froq\encoding\{Encoder, EncoderInterface, EncoderError, EncoderException,
+use froq\encoding\{Encoder, EncoderInterface, EncoderError, EncodingException,
     JsonEncoder, XmlEncoder, GzipEncoder};
 
 /**
@@ -44,7 +44,7 @@ final class Util
      * @param  string $type
      * @param  any    $data
      * @return froq\encoding\EncoderInterface
-     * @throws froq\encoding\EncoderException If no valid encoder type given.
+     * @throws froq\encoding\EncodingException If no valid encoder type given.
      */
     public static final function initEncoder(string $type, $data): EncoderInterface
     {
@@ -57,7 +57,7 @@ final class Util
                 return new GzipEncoder($data);
         }
 
-        throw new EncoderException("Unimplemented encoder type '{$type}' given");
+        throw new EncodingException("Unimplemented encoder type '{$type}' given");
     }
 
     /**

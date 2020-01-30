@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
-use froq\encoding\{Encoder, EncoderInterface, EncoderError, EncoderException};
+use froq\encoding\{Encoder, EncoderInterface, EncoderError};
 use froq\dom\{Dom, DomException};
 
 /**

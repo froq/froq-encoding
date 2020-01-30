@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
-use froq\encoding\{Encoder, EncoderInterface, EncoderError, EncoderException};
+use froq\encoding\{Encoder, EncoderInterface, EncoderError, EncodingException};
 use Throwable;
 
 /**
@@ -41,12 +41,12 @@ final class GzipEncoder extends Encoder implements EncoderInterface
     /**
      * Constructor.
      * @param  any $data
-     * @throws froq\encoding\EncoderException If zlib module not loaded.
+     * @throws froq\encoding\EncodingException If zlib module not loaded.
      */
     public function __construct($data)
     {
         if (!extension_loaded('zlib')) {
-            throw new EncoderException('zlib module not loaded');
+            throw new EncodingException('zlib module not loaded');
         }
 
         parent::__construct(Encoder::TYPE_GZIP, $data);
