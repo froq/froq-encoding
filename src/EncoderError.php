@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
-use froq\Error;
+use froq\common\Error;
 
 /**
  * Encoder Error.
