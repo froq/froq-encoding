@@ -57,7 +57,7 @@ final class Util
                 return new GzipEncoder($data);
         }
 
-        throw new EncodingException("Unimplemented encoder type '{$type}' given");
+        throw new EncodingException('Unimplemented encoder type "%s"', [$type]);
     }
 
     /**

@@ -41,7 +41,7 @@ final class GzipEncoder extends Encoder implements EncoderInterface
     /**
      * Constructor.
      * @param  any $data
-     * @throws froq\encoding\EncodingException If zlib module not loaded.
+     * @throws froq\encoding\EncodingException
      */
     public function __construct($data)
     {
@@ -60,29 +60,30 @@ final class GzipEncoder extends Encoder implements EncoderInterface
         $data = $this->data;
 
         if (!is_string($data)) {
-            $error = new EncoderError(sprintf('String data needed for %s(), %s given',
-                __method__, gettype($data)));
+            $error = new EncoderError('String data needed for "%s()", "%s" given',
+                [__method__, gettype($data)]);
             return null;
         }
 
-        if ($data != '') {
-            try {
-                $data = gzencode($data,
-                    (int) ($options['level'] ?? -1),
-                    (int) ($options['mode'] ?? FORCE_GZIP)
-                );
-
-                if ($data === false) {
-                    $data = null;
-                    $error = new EncoderError(error(), EncoderError::TYPE_GZIP);
-                }
-            } catch (Throwable $e) {
-                $data = null;
-                $error = new EncoderError($e->getMessage(), EncoderError::TYPE_GZIP);
-            }
+        // Skip empty strings.
+        if ($data === '') {
+            return null;
         }
 
-        return $data;
+        try {
+            $result = gzencode($data,
+                (int) ($options['level'] ?? -1),
+                (int) ($options['mode'] ?? FORCE_GZIP)
+            );
+
+            if ($result === false) {
+                throw new EncoderError(error_get_last()['message'] ?? 'Unknown GZip error');
+            }
+            return $result;
+        } catch (Throwable $e) {
+            $error = new EncoderError($e->getMessage(), null, EncoderError::TYPE_GZIP);
+            return null;
+        }
     }
 
     /**
@@ -93,27 +94,28 @@ final class GzipEncoder extends Encoder implements EncoderInterface
         $data = $this->data;
 
         if (!is_string($data)) {
-            $error = new EncoderError(sprintf('String data needed for %s(), %s given',
-                __method__, gettype($data)));
+            $error = new EncoderError('String data needed for "%s()", "%s" given',
+                [__method__, gettype($data)]);
             return null;
         }
 
-        if ($data != '') {
-            try {
-                $data = gzdecode($data,
-                    (int) ($options['length'] ?? 0)
-                );
-
-                if ($data === false) {
-                    $data = null;
-                    $error = new EncoderError(error(), EncoderError::TYPE_GZIP);
-                }
-            } catch (Throwable $e) {
-                $data = null;
-                $error = new EncoderError($e->getMessage(), EncoderError::TYPE_GZIP);
-            }
+        // Skip empty strings.
+        if ($data === '') {
+            return null;
         }
 
-        return $data;
+        try {
+            $result = gzdecode($data,
+                (int) ($options['length'] ?? 0)
+            );
+
+            if ($result === false) {
+                throw new EncoderError(error_get_last()['message'] ?? 'Unknown GZip error');
+            }
+            return $result;
+        } catch (Throwable $e) {
+            $error = new EncoderError($e->getMessage(), null, EncoderError::TYPE_GZIP);
+            return null;
+        }
     }
 }

@@ -58,28 +58,26 @@ final class JsonEncoder extends Encoder implements EncoderInterface
     public function encode(array $options = null, EncoderError &$error = null)
     {
         $data = $this->data;
-        if ($data === '') { // skip empty strings
+
+        // Skip empty strings.
+        if ($data === '') {
             return '""';
         }
 
         try {
-            $data = json_encode($data,
+            $result = json_encode($data,
                 (int) ($options['flags'] ?? 0),
                 (int) ($options['depth'] ?? 512)
             );
 
             if (json_last_error()) {
-                $data = null;
-                $error = new EncoderError(json_last_error_msg() ?: 'Unknown',
-                    EncoderError::TYPE_JSON);
-
+                throw new EncoderError(json_last_error_msg() ?: 'Unknown JSON error');
             }
+            return $result;
         } catch (Throwable $e) {
-            $data = null;
-            $error = new EncoderError($e->getMessage(), EncoderError::TYPE_JSON);
+            $error = new EncoderError($e->getMessage(), null, EncoderError::TYPE_JSON);
+            return null;
         }
-
-        return $data;
     }
 
     /**
@@ -90,38 +88,36 @@ final class JsonEncoder extends Encoder implements EncoderInterface
         $data = $this->data;
 
         if (!is_string($data)) {
-            $error = new EncoderError(sprintf('String data needed for %s(), %s given',
-                __method__, gettype($data)));
+            $error = new EncoderError('String data needed for "%s()", "%s" given',
+                [__method__, gettype($data)]);
             return null;
         }
 
-        if ($data === '') { // skip empty strings (that already null)
+        // Skip empty strings.
+        if ($data === '') {
             return null;
         }
 
-        // if 'false' given with JSON_OBJECT_AS_ARRAY in flags, simply 'false' overrides on..
+        // If false given with JSON_OBJECT_AS_ARRAY in flags, simply false overrides on.
         $options['assoc'] = $options['assoc'] ?? null;
         if ($options['assoc'] !== null) {
             $options['assoc'] = (bool) $options['assoc'];
         }
 
         try {
-            $data = json_decode($data,
+            $result = json_decode($data,
                        $options['assoc'],
                 (int) ($options['depth'] ?? 512),
                 (int) ($options['flags'] ?? 0)
             );
 
             if (json_last_error()) {
-                $data = null;
-                $error = new EncoderError(json_last_error_msg() ?: 'Unknown',
-                    EncoderError::TYPE_JSON);
+                throw new EncoderError(json_last_error_msg() ?: 'Unknown JSON error');
             }
+            return $result;
         } catch (Throwable $e) {
-            $data = null;
-            $error = new EncoderError($e->getMessage(), EncoderError::TYPE_JSON);
+            $error = new EncoderError($e->getMessage(), null, EncoderError::TYPE_JSON);
+            return null;
         }
-
-        return $data;
     }
 }

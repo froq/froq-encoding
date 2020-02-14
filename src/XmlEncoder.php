@@ -27,7 +27,8 @@ declare(strict_types=1);
 namespace froq\encoding;
 
 use froq\encoding\{Encoder, EncoderInterface, EncoderError};
-use froq\dom\{Dom, DomException};
+use froq\dom\Dom;
+use Throwable;
 
 /**
  * Xml Encoder.
@@ -54,28 +55,26 @@ final class XmlEncoder extends Encoder implements EncoderInterface
     {
         $data = $this->data;
 
-        if (!is_array($data) && !is_object($data)) {
-            $error = new EncoderError(sprintf('Array or object data needed for %s(), %s given',
-                __method__, gettype($data)));
+        if (!is_array($data)) {
+            $error = new EncoderError('Array needed for "%s()", "%s" given',
+                [__method__, gettype($data)]);
             return null;
         }
 
-        $data = (array) $data;
-        if ($data === []) { // Skip empty arrays.
+        // Skip empty arrays.
+        if ($data === []) {
             return null;
         }
 
         try {
-            $data = Dom::createXmlDocument($data)->toString(
+            return Dom::createXmlDocument($data)->toString(
                 (bool)   ($options['indent'] ?? false),
                 (string) ($options['indentString'] ?? "\t")
             );
-        } catch (DomException $e) {
-            $data = null;
-            $this->error = new EncoderError($e->getMessage(), EncoderError::TYPE_XML);
+        } catch (Throwable $e) {
+            $error = new EncoderError($e->getMessage(), null, EncoderError::TYPE_XML);
+            return null;
         }
-
-        return $data;
     }
 
     /**
@@ -86,18 +85,18 @@ final class XmlEncoder extends Encoder implements EncoderInterface
         $data = $this->data;
 
         if (!is_string($data)) {
-            $error = new EncoderError(sprintf('String data needed for %s(), %s given',
-                __method__, gettype($data)));
+            $error = new EncoderError('String data needed for "%s()", "%s" given',
+                [__method__, gettype($data)]);
             return null;
         }
 
-        $data = (string) $data;
-        if ($data === '') { // Skip empty strings (that already null).
+        // Skip empty strings.
+        if ($data === '') {
             return null;
         }
 
         try {
-            $data = Dom::parseXml($data, [
+            return Dom::parseXml($data, [
                 'validateOnParse'     => (bool) ($options['validateOnParse'] ?? false),
                 'preserveWhiteSpace'  => (bool) ($options['preserveWhiteSpace'] ?? false),
                 'strictErrorChecking' => (bool) ($options['strictErrorChecking'] ?? false),
@@ -105,11 +104,9 @@ final class XmlEncoder extends Encoder implements EncoderInterface
                 'flags'               => (int)  ($options['flags'] ?? 0),
                 'assoc'               => (bool) ($options['assoc'] ?? true),
             ]);
-        } catch (DomException $e) {
-            $data = null;
-            $error = new EncoderError($e->getMessage(), EncoderError::TYPE_XML);
+        } catch (Throwable $e) {
+            $error = new EncoderError($e->getMessage(), null, EncoderError::TYPE_XML);
+            return null;
         }
-
-        return $data;
     }
 }
