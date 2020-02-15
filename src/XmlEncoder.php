@@ -57,7 +57,7 @@ final class XmlEncoder extends AbstractEncoder
 
         if (!is_array($data)) {
             $error = new EncoderError('Array needed for "%s()", "%s" given',
-                [__method__, gettype($data)]);
+                [__method__, gettype($data)], EncoderError::XML);
             return null;
         }
 
@@ -86,7 +86,7 @@ final class XmlEncoder extends AbstractEncoder
 
         if (!is_string($data)) {
             $error = new EncoderError('String data needed for "%s()", "%s" given',
-                [__method__, gettype($data)]);
+                [__method__, gettype($data)], EncoderError::XML);
             return null;
         }
 

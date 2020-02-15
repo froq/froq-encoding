@@ -89,7 +89,7 @@ final class JsonEncoder extends AbstractEncoder
 
         if (!is_string($data)) {
             $error = new EncoderError('String data needed for "%s()", "%s" given',
-                [__method__, gettype($data)]);
+                [__method__, gettype($data)], EncoderError::JSON);
             return null;
         }
 

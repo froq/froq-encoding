@@ -61,7 +61,7 @@ final class GzipEncoder extends AbstractEncoder
 
         if (!is_string($data)) {
             $error = new EncoderError('String data needed for "%s()", "%s" given',
-                [__method__, gettype($data)]);
+                [__method__, gettype($data)], EncoderError::GZIP);
             return null;
         }
 
@@ -95,7 +95,7 @@ final class GzipEncoder extends AbstractEncoder
 
         if (!is_string($data)) {
             $error = new EncoderError('String data needed for "%s()", "%s" given',
-                [__method__, gettype($data)]);
+                [__method__, gettype($data)], EncoderError::GZIP);
             return null;
         }
 
