@@ -153,13 +153,16 @@ final class Util
                        ($data[0] . $data[-1] == '{}')
                     || ($data[0] . $data[-1] == '[]')
                     || ($data[0] . $data[-1] == '""')
+                    // Really needed?
+                    // || is_numeric($data)
+                    // || in_array($data, ['null', 'true', 'false'])
                 );
             case AbstractEncoder::TYPE_XML:
                 return is_string($data) && isset($data[0], $data[-1]) && (
                     ($data[0] . $data[-1] == '<>')
                 );
             case AbstractEncoder::TYPE_GZIP:
-                return is_string($data) && (strpos($data, "\x1F\x8B") === 0);
+                return is_string($data) && stripos($data, "\x1f\x8b") === 0;
         }
 
         return null; // Unknown.
