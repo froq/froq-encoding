@@ -75,7 +75,7 @@ final class JsonEncoder extends AbstractEncoder
             }
             return $result;
         } catch (Throwable $e) {
-            $error = new EncoderError($e->getMessage(), null, EncoderError::TYPE_JSON);
+            $error = new EncoderError($e->getMessage(), null, EncoderError::JSON);
             return null;
         }
     }
@@ -116,7 +116,7 @@ final class JsonEncoder extends AbstractEncoder
             }
             return $result;
         } catch (Throwable $e) {
-            $error = new EncoderError($e->getMessage(), null, EncoderError::TYPE_JSON);
+            $error = new EncoderError($e->getMessage(), null, EncoderError::JSON);
             return null;
         }
     }

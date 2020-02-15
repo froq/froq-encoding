@@ -81,7 +81,7 @@ final class GzipEncoder extends AbstractEncoder
             }
             return $result;
         } catch (Throwable $e) {
-            $error = new EncoderError($e->getMessage(), null, EncoderError::TYPE_GZIP);
+            $error = new EncoderError($e->getMessage(), null, EncoderError::GZIP);
             return null;
         }
     }
@@ -114,7 +114,7 @@ final class GzipEncoder extends AbstractEncoder
             }
             return $result;
         } catch (Throwable $e) {
-            $error = new EncoderError($e->getMessage(), null, EncoderError::TYPE_GZIP);
+            $error = new EncoderError($e->getMessage(), null, EncoderError::GZIP);
             return null;
         }
     }

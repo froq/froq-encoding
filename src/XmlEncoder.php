@@ -72,7 +72,7 @@ final class XmlEncoder extends AbstractEncoder
                 (string) ($options['indentString'] ?? "\t")
             );
         } catch (Throwable $e) {
-            $error = new EncoderError($e->getMessage(), null, EncoderError::TYPE_XML);
+            $error = new EncoderError($e->getMessage(), null, EncoderError::XML);
             return null;
         }
     }
@@ -105,7 +105,7 @@ final class XmlEncoder extends AbstractEncoder
                 'assoc'               => (bool) ($options['assoc'] ?? true),
             ]);
         } catch (Throwable $e) {
-            $error = new EncoderError($e->getMessage(), null, EncoderError::TYPE_XML);
+            $error = new EncoderError($e->getMessage(), null, EncoderError::XML);
             return null;
         }
     }
