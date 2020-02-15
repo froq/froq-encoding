@@ -41,7 +41,7 @@ final class JsonEncoder extends AbstractEncoder
     /**
      * Constructor.
      * @param  any $data
-     * @throws froq\encoding\EncodingException If json module not loaded.
+     * @throws froq\encoding\EncodingException
      */
     public function __construct($data)
     {
