@@ -67,7 +67,7 @@ final class GzipEncoder extends AbstractEncoder
 
         // Skip empty strings.
         if ($data === '') {
-            return null;
+            return '';
         }
 
         try {

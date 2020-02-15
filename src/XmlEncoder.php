@@ -63,7 +63,7 @@ final class XmlEncoder extends AbstractEncoder
 
         // Skip empty arrays.
         if ($data === []) {
-            return null;
+            return '';
         }
 
         try {
