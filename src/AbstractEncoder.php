@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
-use froq\encoding\{EncoderError, Util as EncodingUtil};
+use froq\encoding\{Encoder, EncoderError};
 
 /**
  * Abstract Encoder.
@@ -37,14 +37,6 @@ use froq\encoding\{EncoderError, Util as EncodingUtil};
  */
 abstract class AbstractEncoder
 {
-    /**
-     * Types.
-     * @const string
-     */
-    public const TYPE_JSON = 'json',
-                 TYPE_XML  = 'xml',
-                 TYPE_GZIP = 'gzip';
-
     /**
      * Type.
      * @var   string
@@ -97,7 +89,7 @@ abstract class AbstractEncoder
      */
     public final function isEncoded(): bool
     {
-        return EncodingUtil::isEncoded($this->type, $this->data);
+        return Encoder::isEncoded($this->type, $this->data);
     }
 
     /**

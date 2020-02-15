@@ -41,7 +41,7 @@ final class XmlEncoder extends AbstractEncoder
 {
     /**
      * Constructor.
-     * @param any $data
+     * @param array|string $data
      */
     public function __construct($data)
     {

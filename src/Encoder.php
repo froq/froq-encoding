@@ -30,30 +30,38 @@ use froq\encoding\{AbstractEncoder, EncoderError, EncodingException,
     JsonEncoder, XmlEncoder, GzipEncoder};
 
 /**
- * Util.
+ * Encoder.
  * @package froq\encoding
- * @object  froq\encoding\Util
+ * @object  froq\encoding\Encoder
  * @author  Kerem Güneş <k-gun@mail.com>
  * @since   4.0
  * @static
  */
-final class Util
+final class Encoder
 {
     /**
-     * Init encoder.
+     * Types.
+     * @const string
+     */
+    public const TYPE_JSON = 'json',
+                 TYPE_XML  = 'xml',
+                 TYPE_GZIP = 'gzip';
+
+    /**
+     * Init.
      * @param  string $type
      * @param  any    $data
      * @return froq\encoding\AbstractEncoder
      * @throws froq\encoding\EncodingException
      */
-    public static final function initEncoder(string $type, $data): AbstractEncoder
+    public static function init(string $type, $data): AbstractEncoder
     {
         switch ($type) {
-            case AbstractEncoder::TYPE_JSON:
+            case self::TYPE_JSON:
                 return new JsonEncoder($data);
-            case AbstractEncoder::TYPE_XML:
-                return new xmlEncoder($data);
-            case AbstractEncoder::TYPE_GZIP:
+            case self::TYPE_XML:
+                return new XmlEncoder($data);
+            case self::TYPE_GZIP:
                 return new GzipEncoder($data);
         }
 
@@ -67,10 +75,9 @@ final class Util
      * @param  froq\encoding\EncoderError|null &$error
      * @return string|null
      */
-    public static final function jsonEncode($data, array $options = null,
-        EncoderError &$error = null)
+    public static function jsonEncode($data, array $options = null, EncoderError &$error = null)
     {
-        return (new JsonEncoder($data))->encode($options, $error);
+        return self::init(self::TYPE_JSON, $data)->encode($options, $error);
     }
 
     /**
@@ -80,23 +87,21 @@ final class Util
      * @param  froq\encoding\EncoderError|null &$error
      * @return any
      */
-    public static final function jsonDecode(string $data, array $options = null,
-        EncoderError &$error = null)
+    public static function jsonDecode(string $data, array $options = null, EncoderError &$error = null)
     {
-        return (new JsonEncoder($data))->decode($options, $error);
+        return self::init(self::TYPE_JSON, $data)->decode($options, $error);
     }
 
     /**
      * Xml encode.
-     * @param  array|object $data
+     * @param  array      $data
      * @param  array|null $options
      * @param  froq\encoding\EncoderError|null &$error
      * @return string|null
      */
-    public static final function xmlEncode($data, array $options = null,
-        EncoderError &$error = null)
+    public static function xmlEncode(array $data, array $options = null, EncoderError &$error = null)
     {
-        return (new XmlEncoder($data))->encode($options, $error);
+        return self::init(self::TYPE_XML, $data)->encode($options, $error);
     }
 
     /**
@@ -106,10 +111,9 @@ final class Util
      * @param  froq\encoding\EncoderError|null &$error
      * @return array|object|null
      */
-    public static final function xmlDecode(string $data, array $options = null,
-        EncoderError &$error = null)
+    public static function xmlDecode(string $data, array $options = null, EncoderError &$error = null)
     {
-        return (new XmlEncoder($data))->decode($options, $error);
+        return self::init(self::TYPE_XML, $data)->decode($options, $error);
     }
 
     /**
@@ -119,10 +123,9 @@ final class Util
      * @param  froq\encoding\EncoderError|null &$error
      * @return string|null
      */
-    public static final function gzipEncode(string $data, array $options = null,
-        EncoderError &$error = null)
+    public static function gzipEncode(string $data, array $options = null, EncoderError &$error = null)
     {
-        return (new GzipEncoder($data))->encode($options, $error);
+        return self::init(self::TYPE_GZIP, $data)->encode($options, $error);
     }
 
     /**
@@ -132,10 +135,9 @@ final class Util
      * @param  froq\encoding\EncoderError|null &$error
      * @return string|null
      */
-    public static final function gzipDecode(string $data, array $options = null,
-        EncoderError &$error = null)
+    public static function gzipDecode(string $data, array $options = null, EncoderError &$error = null)
     {
-        return (new GzipEncoder($data))->decode($options, $error);
+        return self::init(self::TYPE_GZIP, $data)->decode($options, $error);
     }
 
     /**
@@ -145,10 +147,10 @@ final class Util
      * @return ?bool
      * @since  4.0
      */
-    public static final function isEncoded(string $type, $data): ?bool
+    public static function isEncoded(string $type, $data): ?bool
     {
         switch ($type) {
-            case AbstractEncoder::TYPE_JSON:
+            case self::TYPE_JSON:
                 return is_string($data) && isset($data[0], $data[-1]) && (
                        ($data[0] . $data[-1] == '{}')
                     || ($data[0] . $data[-1] == '[]')
@@ -157,11 +159,11 @@ final class Util
                     // || is_numeric($data)
                     // || in_array($data, ['null', 'true', 'false'])
                 );
-            case AbstractEncoder::TYPE_XML:
+            case self::TYPE_XML:
                 return is_string($data) && isset($data[0], $data[-1]) && (
                     ($data[0] . $data[-1] == '<>')
                 );
-            case AbstractEncoder::TYPE_GZIP:
+            case self::TYPE_GZIP:
                 return is_string($data) && stripos($data, "\x1f\x8b") === 0;
         }
 
