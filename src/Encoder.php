@@ -149,22 +149,24 @@ final class Encoder
      */
     public static function isEncoded(string $type, $data): ?bool
     {
-        switch ($type) {
-            case self::TYPE_JSON:
-                return is_string($data) && isset($data[0], $data[-1]) && (
-                       ($data[0] . $data[-1] == '{}')
-                    || ($data[0] . $data[-1] == '[]')
-                    || ($data[0] . $data[-1] == '""')
-                    // Really needed?
-                    // || is_numeric($data)
-                    // || in_array($data, ['null', 'true', 'false'])
-                );
-            case self::TYPE_XML:
-                return is_string($data) && isset($data[0], $data[-1]) && (
-                    ($data[0] . $data[-1] == '<>')
-                );
-            case self::TYPE_GZIP:
-                return is_string($data) && stripos($data, "\x1f\x8b") === 0;
+        if (is_string($data)) {
+            switch ($type) {
+                case self::TYPE_JSON:
+                    return ($data = trim($data)) && isset($data[0], $data[-1]) && (
+                           ($data[0] . $data[-1] == '{}')
+                        || ($data[0] . $data[-1] == '[]')
+                        || ($data[0] . $data[-1] == '""')
+                        // Really needed?
+                        // || is_numeric($data)
+                        // || in_array($data, ['null', 'true', 'false'])
+                    );
+                case self::TYPE_XML:
+                    return ($data = trim($data)) && isset($data[0], $data[-1]) && (
+                        ($data[0] . $data[-1] == '<>')
+                    );
+                case self::TYPE_GZIP:
+                    return stripos($data, "\x1f\x8b") === 0;
+            }
         }
 
         return null; // Unknown.
