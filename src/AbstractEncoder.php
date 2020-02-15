@@ -26,19 +26,19 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
-use froq\encoding\Util as EncodingUtil;
+use froq\encoding\{EncoderError, Util as EncodingUtil};
 
 /**
- * Encoder.
+ * Abstract Encoder.
  * @package froq\encoding
- * @object  froq\encoding\Encoder
+ * @object  froq\encoding\AbstractEncoder
  * @author  Kerem Güneş <k-gun@mail.com>
- * @since   3.0
+ * @since   3.0, 4.0 Refactored.
  */
-abstract class Encoder
+abstract class AbstractEncoder
 {
     /**
-     * Names.
+     * Types.
      * @const string
      */
     public const TYPE_JSON = 'json',
@@ -99,4 +99,22 @@ abstract class Encoder
     {
         return EncodingUtil::isEncoded($this->type, $this->data);
     }
+
+    /**
+     * Encode.
+     * @param  array|null $options
+     * @param  froq\encoding\EncoderError|null &$error
+     * @return any
+     * @since 4.0 Moved from encoder interface.
+     */
+    abstract public function encode(array $options = null, EncoderError &$error = null);
+
+    /**
+     * Decode.
+     * @param  array|null $options
+     * @param  froq\encoding\EncoderError|null &$error
+     * @return any
+     * @since 4.0 Moved from encoder interface.
+     */
+    abstract public function decode(array $options = null, EncoderError &$error = null);
 }

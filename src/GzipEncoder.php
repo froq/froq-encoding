@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
-use froq\encoding\{Encoder, EncoderInterface, EncoderError, EncodingException};
+use froq\encoding\{AbstractEncoder, EncoderError, EncodingException};
 use Throwable;
 
 /**
@@ -36,7 +36,7 @@ use Throwable;
  * @author  Kerem Güneş <k-gun@mail.com>
  * @since   3.0
  */
-final class GzipEncoder extends Encoder implements EncoderInterface
+final class GzipEncoder extends AbstractEncoder
 {
     /**
      * Constructor.
@@ -53,7 +53,7 @@ final class GzipEncoder extends Encoder implements EncoderInterface
     }
 
     /**
-     * @inheritDoc froq\encoding\EncoderInterface
+     * @inheritDoc froq\encoding\AbstractEncoder
      */
     public function encode(array $options = null, EncoderError &$error = null)
     {
@@ -87,7 +87,7 @@ final class GzipEncoder extends Encoder implements EncoderInterface
     }
 
     /**
-     * @inheritDoc froq\encoding\EncoderInterface
+     * @inheritDoc froq\encoding\AbstractEncoder
      */
     public function decode(array $options = null, EncoderError &$error = null)
     {

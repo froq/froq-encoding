@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
-use froq\encoding\{Encoder, EncoderInterface, EncoderError};
+use froq\encoding\{AbstractEncoder, EncoderError};
 use froq\dom\Dom;
 use Throwable;
 
@@ -37,7 +37,7 @@ use Throwable;
  * @author  Kerem Güneş <k-gun@mail.com>
  * @since   4.0
  */
-final class XmlEncoder extends Encoder implements EncoderInterface
+final class XmlEncoder extends AbstractEncoder
 {
     /**
      * Constructor.
@@ -49,7 +49,7 @@ final class XmlEncoder extends Encoder implements EncoderInterface
     }
 
     /**
-     * @inheritDoc froq\encoding\EncoderInterface
+     * @inheritDoc froq\encoding\AbstractEncoder
      */
     public function encode(array $options = null, EncoderError &$error = null)
     {
@@ -78,7 +78,7 @@ final class XmlEncoder extends Encoder implements EncoderInterface
     }
 
     /**
-     * @inheritDoc froq\encoding\EncoderInterface
+     * @inheritDoc froq\encoding\AbstractEncoder
      */
     public function decode(array $options = null, EncoderError &$error = null)
     {

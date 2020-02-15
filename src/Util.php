@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
-use froq\encoding\{Encoder, EncoderInterface, EncoderError, EncodingException,
+use froq\encoding\{AbstractEncoder, EncoderError, EncodingException,
     JsonEncoder, XmlEncoder, GzipEncoder};
 
 /**
@@ -43,17 +43,17 @@ final class Util
      * Init encoder.
      * @param  string $type
      * @param  any    $data
-     * @return froq\encoding\EncoderInterface
-     * @throws froq\encoding\EncodingException If no valid encoder type given.
+     * @return froq\encoding\AbstractEncoder
+     * @throws froq\encoding\EncodingException
      */
-    public static final function initEncoder(string $type, $data): EncoderInterface
+    public static final function initEncoder(string $type, $data): AbstractEncoder
     {
         switch ($type) {
-            case Encoder::TYPE_JSON:
+            case AbstractEncoder::TYPE_JSON:
                 return new JsonEncoder($data);
-            case Encoder::TYPE_XML:
+            case AbstractEncoder::TYPE_XML:
                 return new xmlEncoder($data);
-            case Encoder::TYPE_GZIP:
+            case AbstractEncoder::TYPE_GZIP:
                 return new GzipEncoder($data);
         }
 
@@ -148,17 +148,17 @@ final class Util
     public static final function isEncoded(string $type, $data): ?bool
     {
         switch ($type) {
-            case Encoder::TYPE_JSON:
+            case AbstractEncoder::TYPE_JSON:
                 return is_string($data) && isset($data[0], $data[-1]) && (
                        ($data[0] . $data[-1] == '{}')
                     || ($data[0] . $data[-1] == '[]')
                     || ($data[0] . $data[-1] == '""')
                 );
-            case Encoder::TYPE_XML:
+            case AbstractEncoder::TYPE_XML:
                 return is_string($data) && isset($data[0], $data[-1]) && (
                     ($data[0] . $data[-1] == '<>')
                 );
-            case Encoder::TYPE_GZIP:
+            case AbstractEncoder::TYPE_GZIP:
                 return is_string($data) && (strpos($data, "\x1F\x8B") === 0);
         }
 
