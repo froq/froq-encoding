@@ -1,14 +1,16 @@
 {
     "name": "froq/froq-encoding",
     "homepage": "https://github.com/froq/froq-encoding",
-    "description": "Encoding module for Froq!",
+    "description": "Froq! Encoding.",
     "keywords": ["froq", "encoding"],
     "license": "MIT",
     "authors": [
         {"name": "Kerem Güneş", "email": "k-gun@mail.com"}
     ],
     "require": {
-        "php": "^7.2"
+        "php": "^7.4",
+        "froq/froq-common": "^4.0",
+        "froq/froq-dom": "^4.0"
     },
     "autoload": {
         "classmap": ["src/"]

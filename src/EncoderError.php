@@ -26,26 +26,22 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
+use froq\common\Error;
+
 /**
- * Encoder interface.
+ * Encoder Error.
  * @package froq\encoding
- * @object  froq\encoding\EncoderInterface
+ * @object  froq\encoding\EncoderError
  * @author  Kerem Güneş <k-gun@mail.com>
- * @since   3.0
+ * @since   4.0
  */
-interface EncoderInterface
+final class EncoderError extends Error
 {
     /**
-     * Encode.
-     * @param  any $data
-     * @return any
+     * Types.
+     * @const int
      */
-    public function encode($data);
-
-    /**
-     * Decode.
-     * @param  any $data
-     * @return any
-     */
-    public function decode($data);
+    public const JSON = 1,
+                 XML  = 2,
+                 GZIP = 3;
 }

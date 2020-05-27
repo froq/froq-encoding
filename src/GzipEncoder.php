@@ -26,69 +26,96 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
+use froq\encoding\{AbstractEncoder, EncoderError, EncodingException};
+use Throwable;
+
 /**
- * Gzip encoder.
+ * Gzip Encoder.
  * @package froq\encoding
  * @object  froq\encoding\GzipEncoder
  * @author  Kerem Güneş <k-gun@mail.com>
  * @since   3.0
  */
-final class GzipEncoder extends Encoder
+final class GzipEncoder extends AbstractEncoder
 {
     /**
-     * Cconstructor.
-     * @param  array|null $options
-     * @throws froq\encoding\EncoderException
+     * Constructor.
+     * @param  any $data
+     * @throws froq\encoding\EncodingException
      */
-    public function __construct(array $options = null)
+    public function __construct($data)
     {
-        if (!function_exists('gzencode')) {
-            throw new EncoderException('GZip module not found');
+        if (!extension_loaded('zlib')) {
+            throw new EncodingException('zlib module not loaded');
         }
 
-        // set defaults
-        $options = [
-            'level'  => (int) ($options['level'] ?? -1),
-            'mode'   => (int) ($options['mode'] ?? FORCE_GZIP),
-            'length' => (int) ($options['length'] ?? PHP_INT_MAX)
-        ];
-
-        parent::__construct($options);
+        parent::__construct(Encoder::TYPE_GZIP, $data);
     }
 
     /**
-     * Encode.
-     * @param  ?string $data
-     * @return ?string
+     * @inheritDoc froq\encoding\AbstractEncoder
      */
-    public function encode($data)
+    public function encode(array $options = null, EncoderError &$error = null)
     {
-        if ($data !== null) {
-            $data = gzencode((string) $data, $this->options['level'], $this->options['mode']);
-            if ($data === false) {
-                $data = null;
-                $this->error = error_get_last()['message'] ?? 'Unknown';
-            }
+        $data = $this->data;
+
+        if (!is_string($data)) {
+            $error = new EncoderError('String data needed for "%s()", "%s" given',
+                [__method__, gettype($data)], EncoderError::GZIP);
+            return null;
         }
 
-        return $data;
+        // Skip empty strings.
+        if ($data === '') {
+            return '';
+        }
+
+        try {
+            $result = gzencode($data,
+                (int) ($options['level'] ?? -1),
+                (int) ($options['mode'] ?? FORCE_GZIP)
+            );
+
+            if ($result === false) {
+                throw new EncoderError(error_get_last()['message'] ?? 'Unknown GZip error');
+            }
+            return $result;
+        } catch (Throwable $e) {
+            $error = new EncoderError($e->getMessage(), null, EncoderError::GZIP);
+            return null;
+        }
     }
 
     /**
-     * Decode.
-     * @param  ?string $data
-     * @return ?string
+     * @inheritDoc froq\encoding\AbstractEncoder
      */
-    public function decode($data)
+    public function decode(array $options = null, EncoderError &$error = null)
     {
-        if ($data !== null) {
-            $data = gzdecode((string) $data, $this->options['length']);
-            if ($data === false) {
-                $data = null;
-                $this->error = error_get_last()['message'] ?? 'Unknown';
-            }
+        $data = $this->data;
+
+        if (!is_string($data)) {
+            $error = new EncoderError('String data needed for "%s()", "%s" given',
+                [__method__, gettype($data)], EncoderError::GZIP);
+            return null;
         }
 
-        return $data;
+        // Skip empty strings.
+        if ($data === '') {
+            return null;
+        }
+
+        try {
+            $result = gzdecode($data,
+                (int) ($options['length'] ?? 0)
+            );
+
+            if ($result === false) {
+                throw new EncoderError(error_get_last()['message'] ?? 'Unknown GZip error');
+            }
+            return $result;
+        } catch (Throwable $e) {
+            $error = new EncoderError($e->getMessage(), null, EncoderError::GZIP);
+            return null;
+        }
     }
 }

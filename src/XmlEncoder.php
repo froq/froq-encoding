@@ -26,30 +26,26 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
-use froq\encoding\{AbstractEncoder, EncoderError, EncodingException};
+use froq\encoding\{AbstractEncoder, EncoderError};
+use froq\dom\Dom;
 use Throwable;
 
 /**
- * Json Encoder.
+ * Xml Encoder.
  * @package froq\encoding
- * @object  froq\encoding\JsonEncoder
+ * @object  froq\encoding\XmlEncoder
  * @author  Kerem Güneş <k-gun@mail.com>
- * @since   3.0
+ * @since   4.0
  */
-final class JsonEncoder extends AbstractEncoder
+final class XmlEncoder extends AbstractEncoder
 {
     /**
      * Constructor.
-     * @param  any $data
-     * @throws froq\encoding\EncodingException
+     * @param array|string $data
      */
     public function __construct($data)
     {
-        if (!extension_loaded('json')) {
-            throw new EncodingException('json module not loaded');
-        }
-
-        parent::__construct(Encoder::TYPE_JSON, $data);
+        parent::__construct(Encoder::TYPE_XML, $data);
     }
 
     /**
@@ -59,23 +55,24 @@ final class JsonEncoder extends AbstractEncoder
     {
         $data = $this->data;
 
-        // Skip empty strings.
-        if ($data === '') {
-            return '""';
+        if (!is_array($data)) {
+            $error = new EncoderError('Array needed for "%s()", "%s" given',
+                [__method__, gettype($data)], EncoderError::XML);
+            return null;
+        }
+
+        // Skip empty arrays.
+        if ($data === []) {
+            return '';
         }
 
         try {
-            $result = json_encode($data,
-                (int) ($options['flags'] ?? 0),
-                (int) ($options['depth'] ?? 512)
+            return Dom::createXmlDocument($data)->toString(
+                (bool)   ($options['indent'] ?? false),
+                (string) ($options['indentString'] ?? "\t")
             );
-
-            if (json_last_error()) {
-                throw new EncoderError(json_last_error_msg() ?: 'Unknown JSON error');
-            }
-            return $result;
         } catch (Throwable $e) {
-            $error = new EncoderError($e->getMessage(), null, EncoderError::JSON);
+            $error = new EncoderError($e->getMessage(), null, EncoderError::XML);
             return null;
         }
     }
@@ -89,7 +86,7 @@ final class JsonEncoder extends AbstractEncoder
 
         if (!is_string($data)) {
             $error = new EncoderError('String data needed for "%s()", "%s" given',
-                [__method__, gettype($data)], EncoderError::JSON);
+                [__method__, gettype($data)], EncoderError::XML);
             return null;
         }
 
@@ -98,25 +95,17 @@ final class JsonEncoder extends AbstractEncoder
             return null;
         }
 
-        // If false given with JSON_OBJECT_AS_ARRAY in flags, simply false overrides on.
-        $options['assoc'] = $options['assoc'] ?? null;
-        if ($options['assoc'] !== null) {
-            $options['assoc'] = (bool) $options['assoc'];
-        }
-
         try {
-            $result = json_decode($data,
-                       $options['assoc'],
-                (int) ($options['depth'] ?? 512),
-                (int) ($options['flags'] ?? 0)
-            );
-
-            if (json_last_error()) {
-                throw new EncoderError(json_last_error_msg() ?: 'Unknown JSON error');
-            }
-            return $result;
+            return Dom::parseXml($data, [
+                'validateOnParse'     => (bool) ($options['validateOnParse'] ?? false),
+                'preserveWhiteSpace'  => (bool) ($options['preserveWhiteSpace'] ?? false),
+                'strictErrorChecking' => (bool) ($options['strictErrorChecking'] ?? false),
+                'throwErrors'         => (bool) ($options['throwErrors'] ?? true),
+                'flags'               => (int)  ($options['flags'] ?? 0),
+                'assoc'               => (bool) ($options['assoc'] ?? true),
+            ]);
         } catch (Throwable $e) {
-            $error = new EncoderError($e->getMessage(), null, EncoderError::JSON);
+            $error = new EncoderError($e->getMessage(), null, EncoderError::XML);
             return null;
         }
     }
