@@ -17,5 +17,5 @@ use froq\common\Exception;
  * @author  Kerem Güneş <k-gun@mail.com>
  * @since   3.0
  */
-final class EncodingException extends Exception
+class EncodingException extends Exception
 {}
