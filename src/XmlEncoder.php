@@ -38,7 +38,7 @@ final class XmlEncoder extends AbstractEncoder
         $data = $this->data;
 
         if (!is_array($data)) {
-            $error = new EncoderError('Array needed for "%s()", "%s" given',
+            $error = new EncoderError("Array needed for '%s()', '%s' given",
                 [__method__, gettype($data)], EncoderError::XML);
             return null;
         }
@@ -54,7 +54,7 @@ final class XmlEncoder extends AbstractEncoder
                 (string) ($options['indentString'] ?? "\t")
             );
         } catch (Throwable $e) {
-            $error = new EncoderError($e->getMessage(), null, EncoderError::XML);
+            $error = new EncoderError($e, null, EncoderError::XML);
             return null;
         }
     }
@@ -67,7 +67,7 @@ final class XmlEncoder extends AbstractEncoder
         $data = $this->data;
 
         if (!is_string($data)) {
-            $error = new EncoderError('String data needed for "%s()", "%s" given',
+            $error = new EncoderError("String data needed for '%s()', '%s' given",
                 [__method__, gettype($data)], EncoderError::XML);
             return null;
         }
@@ -87,7 +87,7 @@ final class XmlEncoder extends AbstractEncoder
                 'assoc'               => (bool) ($options['assoc'] ?? true),
             ]);
         } catch (Throwable $e) {
-            $error = new EncoderError($e->getMessage(), null, EncoderError::XML);
+            $error = new EncoderError($e, null, EncoderError::XML);
             return null;
         }
     }

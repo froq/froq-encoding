@@ -42,14 +42,9 @@ final class GzipEncoder extends AbstractEncoder
         $data = $this->data;
 
         if (!is_string($data)) {
-            $error = new EncoderError('String data needed for "%s()", "%s" given',
+            $error = new EncoderError("String data needed for '%s()', '%s' given",
                 [__method__, gettype($data)], EncoderError::GZIP);
             return null;
-        }
-
-        // Skip empty strings.
-        if ($data === '') {
-            return '';
         }
 
         try {
@@ -59,11 +54,13 @@ final class GzipEncoder extends AbstractEncoder
             );
 
             if ($result === false) {
-                throw new EncoderError(error_get_last()['message'] ?? 'Unknown GZip error');
+                throw new EncoderError(error_message() ?: 'unknown');
             }
+
             return $result;
         } catch (Throwable $e) {
-            $error = new EncoderError($e->getMessage(), null, EncoderError::GZIP);
+            $error = new EncoderError($e, null, EncoderError::GZIP);
+
             return null;
         }
     }
@@ -76,7 +73,7 @@ final class GzipEncoder extends AbstractEncoder
         $data = $this->data;
 
         if (!is_string($data)) {
-            $error = new EncoderError('String data needed for "%s()", "%s" given',
+            $error = new EncoderError("String data needed for '%s()', '%s' given",
                 [__method__, gettype($data)], EncoderError::GZIP);
             return null;
         }
@@ -92,11 +89,13 @@ final class GzipEncoder extends AbstractEncoder
             );
 
             if ($result === false) {
-                throw new EncoderError(error_get_last()['message'] ?? 'Unknown GZip error');
+                throw new EncoderError(error_message() ?: 'unknown');
             }
+
             return $result;
         } catch (Throwable $e) {
-            $error = new EncoderError($e->getMessage(), null, EncoderError::GZIP);
+            $error = new EncoderError($e, null, EncoderError::GZIP);
+
             return null;
         }
     }

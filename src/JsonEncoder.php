@@ -53,11 +53,13 @@ final class JsonEncoder extends AbstractEncoder
             );
 
             if (json_last_error()) {
-                throw new EncoderError(json_last_error_msg() ?: 'Unknown JSON error');
+                throw new EncoderError(json_last_error_msg() ?: 'unknown');
             }
+
             return $result;
         } catch (Throwable $e) {
-            $error = new EncoderError($e->getMessage(), null, EncoderError::JSON);
+            $error = new EncoderError($e, null, EncoderError::JSON);
+
             return null;
         }
     }
@@ -70,7 +72,7 @@ final class JsonEncoder extends AbstractEncoder
         $data = $this->data;
 
         if (!is_string($data)) {
-            $error = new EncoderError('String data needed for "%s()", "%s" given',
+            $error = new EncoderError("String data needed for '%s()', '%s' given",
                 [__method__, gettype($data)], EncoderError::JSON);
             return null;
         }
@@ -94,11 +96,13 @@ final class JsonEncoder extends AbstractEncoder
             );
 
             if (json_last_error()) {
-                throw new EncoderError(json_last_error_msg() ?: 'Unknown JSON error');
+                throw new EncoderError(json_last_error_msg() ?: 'unknown');
             }
+
             return $result;
         } catch (Throwable $e) {
-            $error = new EncoderError($e->getMessage(), null, EncoderError::JSON);
+            $error = new EncoderError($e, null, EncoderError::JSON);
+
             return null;
         }
     }
