@@ -23,7 +23,5 @@ final class EncoderError extends Error
      * Types.
      * @const int
      */
-    public const JSON = 1,
-                 XML  = 2,
-                 GZIP = 3;
+    public const JSON = 1, XML = 2, GZIP = 3;
 }
