@@ -216,7 +216,7 @@ final class Encoder
                     && strpos($data, "\x1f\x8b") === 0,
 
             default => throw new EncodingException(
-                "Invalid type '%s', valids are: json, xml, gzip", $type
+                'Invalid type `%s`, valids are: json, xml, gzip', $type
             )
         };
     }
