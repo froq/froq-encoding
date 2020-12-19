@@ -213,7 +213,7 @@ final class Encoder
                         ($data[0] . $data[-1]) === '<>'
                     ),
             'gzip' => is_string($data)
-                    && strpos($data, "\x1f\x8b") === 0,
+                    && str_starts_with($data, "\x1f\x8b"),
 
             default => throw new EncodingException(
                 'Invalid type `%s`, valids are: json, xml, gzip', $type
