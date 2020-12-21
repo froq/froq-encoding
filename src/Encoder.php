@@ -67,7 +67,7 @@ final class Encoder
 
         try {
             $out = json_decode($in,
-                       $options['assoc'] ?? null,
+                      ($options['assoc'] ?? null),
                 (int) ($options['depth'] ?? 512),
                 (int) ($options['flags'] ?? 0)
             );
@@ -96,7 +96,7 @@ final class Encoder
     {
         try {
             return Dom::createXmlDocument($in)->toString(
-                (bool)   ($options['indent'] ?? false),
+                (bool)   ($options['indent']       ?? false),
                 (string) ($options['indentString'] ?? '')
             );
         } catch (Throwable $e) {
@@ -118,12 +118,12 @@ final class Encoder
     {
         try {
             return Dom::parseXml($data, [
-                'validateOnParse'     => (bool) ($options['validateOnParse'] ?? false),
-                'preserveWhiteSpace'  => (bool) ($options['preserveWhiteSpace'] ?? false),
+                'validateOnParse'     => (bool) ($options['validateOnParse']     ?? false),
+                'preserveWhiteSpace'  => (bool) ($options['preserveWhiteSpace']  ?? false),
                 'strictErrorChecking' => (bool) ($options['strictErrorChecking'] ?? false),
-                'throwErrors'         => (bool) ($options['throwErrors'] ?? true),
-                'flags'               => (int)  ($options['flags'] ?? 0),
-                'assoc'               => (bool) ($options['assoc'] ?? true),
+                'throwErrors'         => (bool) ($options['throwErrors']         ?? true),
+                'flags'               => (int)  ($options['flags']               ?? 0),
+                'assoc'               => (bool) ($options['assoc']               ?? true),
             ]);
         } catch (Throwable $e) {
             $error = new EncoderError($e, null, EncoderError::XML);
@@ -145,7 +145,7 @@ final class Encoder
         try {
             $out = gzencode($in,
                 (int) ($options['level'] ?? -1),
-                (int) ($options['mode'] ?? FORCE_GZIP)
+                (int) ($options['mode']  ?? FORCE_GZIP)
             );
 
             if ($out === false) {
