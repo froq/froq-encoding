@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
-use froq\encoding\{EncoderError, EncodingException};
 use froq\dom\Dom;
-use Throwable;
 
 /**
  * Encoder.
  *
- * Represents a static encoder entity that available for JSON, XML and GZip encoding processes.
+ * A static encoder class for JSON, XML and GZip encoding/decoding processes.
  *
  * @package froq\encoding
  * @object  froq\encoding\Encoder
@@ -25,7 +23,7 @@ use Throwable;
 final class Encoder
 {
     /**
-     * Build a JSON string with given input.
+     * JSON encode.
      *
      * @param  mixed                           $input
      * @param  array|null                      $options
@@ -34,6 +32,7 @@ final class Encoder
      */
     public static function jsonEncode(mixed $input, array $options = null, EncoderError &$error = null): string|null
     {
+        $error = null;
         try {
             $ret = json_encode($input,
                 (int) ($options['flags'] ?? 0),
@@ -41,19 +40,19 @@ final class Encoder
             );
 
             if (json_last_error()) {
-                throw new EncoderError(json_last_error_msg());
+                throw new \Error(json_last_error_msg());
             }
 
             return $ret;
-        } catch (Throwable $e) {
-            $error = new EncoderError($e, null, EncoderError::JSON);
+        } catch (\Throwable $e) {
+            $error = new EncoderError($e->getMessage(), code: EncoderError::JSON);
 
             return null;
         }
     }
 
     /**
-     * Parse given JSON input.
+     * JSON decode.
      *
      * @param  string                          $input
      * @param  array|null                      $options
@@ -65,6 +64,7 @@ final class Encoder
         // If false given with JSON_OBJECT_AS_ARRAY in flags, simply false overrides on.
         isset($options['assoc']) && $options['assoc'] = (bool) $options['assoc'];
 
+        $error = null;
         try {
             $ret = json_decode($input,
                       ($options['assoc'] ?? null),
@@ -73,19 +73,19 @@ final class Encoder
             );
 
             if (json_last_error()) {
-                throw new EncoderError(json_last_error_msg());
+                throw new \Error(json_last_error_msg());
             }
 
             return $ret;
-        } catch (Throwable $e) {
-            $error = new EncoderError($e, null, EncoderError::JSON);
+        } catch (\Throwable $e) {
+            $error = new EncoderError($e->getMessage(), code: EncoderError::JSON);
 
             return null;
         }
     }
 
     /**
-     * Build a XML string with given input.
+     * XML encode.
      *
      * @param  array                           $input
      * @param  array|null                      $options
@@ -94,20 +94,21 @@ final class Encoder
      */
     public static function xmlEncode(array $input, array $options = null, EncoderError &$error = null): string|null
     {
+        $error = null;
         try {
             return Dom::createXmlDocument($input)->toString(
                 (bool)   ($options['indent']       ?? false),
                 (string) ($options['indentString'] ?? '')
             );
-        } catch (Throwable $e) {
-            $error = new EncoderError($e, null, EncoderError::XML);
+        } catch (\Throwable $e) {
+            $error = new EncoderError($e->getMessage(), code: EncoderError::XML, cause: $e);
 
             return null;
         }
     }
 
     /**
-     * Parse given XML input.
+     * XML decode.
      *
      * @param  string                          $input
      * @param  array|null                      $options
@@ -116,6 +117,7 @@ final class Encoder
      */
     public static function xmlDecode(string $input, array $options = null, EncoderError &$error = null): array|object|null
     {
+        $error = null;
         try {
             return Dom::parseXml($input, [
                 'validateOnParse'     => (bool) ($options['validateOnParse']     ?? false),
@@ -125,63 +127,65 @@ final class Encoder
                 'flags'               => (int)  ($options['flags']               ?? 0),
                 'assoc'               => (bool) ($options['assoc']               ?? true),
             ]);
-        } catch (Throwable $e) {
-            $error = new EncoderError($e, null, EncoderError::XML);
+        } catch (\Throwable $e) {
+            $error = new EncoderError($e->getMessage(), code: EncoderError::XML, cause: $e);
 
             return null;
         }
     }
 
     /**
-     * Encode given input using GZip utils.
+     * GZip encode.
      *
-     * @param  string                           $in
-     * @param  array|null                       $options
+     * @param  string                          $input
+     * @param  array|null                      $options
      * @param  froq\encoding\EncoderError|null &$error
      * @return string|null
      */
-    public static function gzipEncode(string $in, array $options = null, EncoderError &$error = null): string|null
+    public static function gzipEncode(string $input, array $options = null, EncoderError &$error = null): string|null
     {
+        $error = null;
         try {
-            $out = gzencode($in,
+            $ret = gzencode($input,
                 (int) ($options['level'] ?? -1),
                 (int) ($options['mode']  ?? FORCE_GZIP)
             );
 
-            if ($out === false) {
-                throw new EncoderError(error_message());
+            if ($ret === false) {
+                throw new \Error(error_message());
             }
 
-            return $out;
-        } catch (Throwable $e) {
-            $error = new EncoderError($e, null, EncoderError::GZIP);
+            return $ret;
+        } catch (\Throwable $e) {
+            $error = new EncoderError($e->getMessage(), code: EncoderError::GZIP);
 
             return null;
         }
     }
 
     /**
-     * Decode given input using GZip utils.
+     * GZip decode.
      *
-     * @param  string                           $in
-     * @param  array|null                       $options
+     * @param  string                          $input
+     * @param  array|null                      $options
      * @param  froq\encoding\EncoderError|null &$error
      * @return string|null
      */
-    public static function gzipDecode(string $in, array $options = null, EncoderError &$error = null): string|null
+    public static function gzipDecode(string $input, array $options = null, EncoderError &$error = null): string|null
     {
+        $error = null;
         try {
-            $out = gzdecode($in,
+            $ret = gzdecode($input,
                 (int) ($options['length'] ?? 0)
             );
 
-            if ($out === false) {
-                throw new EncoderError(error_message());
+            if ($ret === false) {
+                throw new \Error(error_message());
             }
 
-            return $out;
-        } catch (Throwable $e) {
-            $error = new EncoderError($e, null, EncoderError::GZIP);
+            return $ret;
+        } catch (\Throwable $e) {
+            $error = new EncoderError($e->getMessage(), code: EncoderError::GZIP);
 
             return null;
         }
@@ -216,7 +220,7 @@ final class Encoder
                     && str_starts_with($input, "\x1f\x8b"),
 
             default => throw new EncodingException(
-                'Invalid type `%s`, valids are: json, xml, gzip', $type
+                'Invalid type `%s` [valids: json, xml, gzip]', $type
             )
         };
     }
