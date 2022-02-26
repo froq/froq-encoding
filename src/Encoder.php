@@ -27,15 +27,15 @@ final class Encoder
     /**
      * Build a JSON string with given input.
      *
-     * @param  any                              $in
-     * @param  array|null                       $options
+     * @param  mixed                           $input
+     * @param  array|null                      $options
      * @param  froq\encoding\EncoderError|null &$error
      * @return string|null
      */
-    public static function jsonEncode($in, array $options = null, EncoderError &$error = null): string|null
+    public static function jsonEncode(mixed $input, array $options = null, EncoderError &$error = null): string|null
     {
         try {
-            $out = json_encode($in,
+            $ret = json_encode($input,
                 (int) ($options['flags'] ?? 0),
                 (int) ($options['depth'] ?? 512)
             );
@@ -44,7 +44,7 @@ final class Encoder
                 throw new EncoderError(json_last_error_msg());
             }
 
-            return $out;
+            return $ret;
         } catch (Throwable $e) {
             $error = new EncoderError($e, null, EncoderError::JSON);
 
@@ -55,18 +55,18 @@ final class Encoder
     /**
      * Parse given JSON input.
      *
-     * @param  string                           $in
-     * @param  array|null                       $options
+     * @param  string                          $input
+     * @param  array|null                      $options
      * @param  froq\encoding\EncoderError|null &$error
-     * @return any
+     * @return mixed
      */
-    public static function jsonDecode(string $in, array $options = null, EncoderError &$error = null)
+    public static function jsonDecode(string $input, array $options = null, EncoderError &$error = null): mixed
     {
         // If false given with JSON_OBJECT_AS_ARRAY in flags, simply false overrides on.
         isset($options['assoc']) && $options['assoc'] = (bool) $options['assoc'];
 
         try {
-            $out = json_decode($in,
+            $ret = json_decode($input,
                       ($options['assoc'] ?? null),
                 (int) ($options['depth'] ?? 512),
                 (int) ($options['flags'] ?? 0)
@@ -76,7 +76,7 @@ final class Encoder
                 throw new EncoderError(json_last_error_msg());
             }
 
-            return $out;
+            return $ret;
         } catch (Throwable $e) {
             $error = new EncoderError($e, null, EncoderError::JSON);
 
@@ -87,15 +87,15 @@ final class Encoder
     /**
      * Build a XML string with given input.
      *
-     * @param  array                            $in
-     * @param  array|null                       $options
+     * @param  array                           $input
+     * @param  array|null                      $options
      * @param  froq\encoding\EncoderError|null &$error
      * @return string|null
      */
-    public static function xmlEncode(array $in, array $options = null, EncoderError &$error = null): string|null
+    public static function xmlEncode(array $input, array $options = null, EncoderError &$error = null): string|null
     {
         try {
-            return Dom::createXmlDocument($in)->toString(
+            return Dom::createXmlDocument($input)->toString(
                 (bool)   ($options['indent']       ?? false),
                 (string) ($options['indentString'] ?? '')
             );
@@ -109,15 +109,15 @@ final class Encoder
     /**
      * Parse given XML input.
      *
-     * @param  string                           $data
-     * @param  array|null                       $options
+     * @param  string                          $input
+     * @param  array|null                      $options
      * @param  froq\encoding\EncoderError|null &$error
      * @return array|object|null
      */
-    public static function xmlDecode(string $data, array $options = null, EncoderError &$error = null): array|object|null
+    public static function xmlDecode(string $input, array $options = null, EncoderError &$error = null): array|object|null
     {
         try {
-            return Dom::parseXml($data, [
+            return Dom::parseXml($input, [
                 'validateOnParse'     => (bool) ($options['validateOnParse']     ?? false),
                 'preserveWhiteSpace'  => (bool) ($options['preserveWhiteSpace']  ?? false),
                 'strictErrorChecking' => (bool) ($options['strictErrorChecking'] ?? false),
@@ -191,29 +191,29 @@ final class Encoder
      * Check encoded status of given input.
      *
      * @param  string $type
-     * @param  any    $data
+     * @param  mixed  $input
      * @return bool
      * @since  4.0
      * @throws froq\encoding\EncodingException
      */
-    public static function isEncoded(string $type, $data): bool
+    public static function isEncoded(string $type, mixed $input): bool
     {
         return match ($type) {
-            'json' => is_string($data)
-                    && ($data = trim($data))
-                    && isset($data[0], $data[-1])
+            'json' => is_string($input)
+                    && ($input = trim($input))
+                    && isset($input[0], $input[-1])
                     && (
-                        ($data[0] . $data[-1]) === '{}' ||
-                        ($data[0] . $data[-1]) === '[]' ||
-                        ($data[0] . $data[-1]) === '""'
+                        ($input[0] . $input[-1]) === '{}' ||
+                        ($input[0] . $input[-1]) === '[]' ||
+                        ($input[0] . $input[-1]) === '""'
                     ),
-            'xml' => is_string($data)
-                    && ($data = trim($data))
-                    && isset($data[0], $data[-1]) && (
-                        ($data[0] . $data[-1]) === '<>'
+            'xml' => is_string($input)
+                    && ($input = trim($input))
+                    && isset($input[0], $input[-1]) && (
+                        ($input[0] . $input[-1]) === '<>'
                     ),
-            'gzip' => is_string($data)
-                    && str_starts_with($data, "\x1f\x8b"),
+            'gzip' => is_string($input)
+                    && str_starts_with($input, "\x1f\x8b"),
 
             default => throw new EncodingException(
                 'Invalid type `%s`, valids are: json, xml, gzip', $type
