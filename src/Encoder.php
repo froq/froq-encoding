@@ -220,7 +220,8 @@ final class Encoder
                     && str_starts_with($input, "\x1f\x8b"),
 
             default => throw new EncodingException(
-                'Invalid type `%s` [valids: json, xml, gzip]', $type
+                'Invalid type `%s` [valids: json, xml, gzip]',
+                $type
             )
         };
     }
