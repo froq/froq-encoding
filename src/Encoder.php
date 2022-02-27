@@ -217,7 +217,7 @@ final class Encoder
                         ($input[0] . $input[-1]) === '<>'
                     ),
             'gzip' => is_string($input)
-                    && str_starts_with($input, "\x1f\x8b"),
+                    && str_starts_with($input, "\x1F\x8B"),
 
             default => throw new EncodingException(
                 'Invalid type `%s` [valids: json, xml, gzip]',
