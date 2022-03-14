@@ -7,23 +7,20 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
-use froq\common\Error;
-
 /**
- * Encoder Error.
+ * Encoding.
  *
  * @package froq\encoding
- * @object  froq\encoding\EncoderError
+ * @object  froq\encoding\Encoding
  * @author  Kerem Güneş
- * @since   4.0
+ * @since   6.0
  */
-final class EncoderError extends Error
+class Encoding extends \StaticClass
 {
     /**
      * Types.
-     * @const int
+     * @const string
      */
-    public const JSON = 1,
-                 XML  = 2,
-                 GZIP = 3;
+    final const TYPE_UTF_8 = 'UTF-8',
+                TYPE_ASCII = 'ASCII',
 }
