@@ -32,10 +32,10 @@ abstract class Encoder
     /**
      * Constructor.
      *
-     * @param ?array      $options
-     * @param ?array|null $optionsDefault
+     * @param array|null $options
+     * @param array|null $optionsDefault
      */
-    public function __construct(?array $options, ?array $optionsDefault = null)
+    public function __construct(array $options = null, array $optionsDefault = null)
     {
         // When defined in subclass.
         $optionsDefault ??= static::$optionsDefault ?? null;
