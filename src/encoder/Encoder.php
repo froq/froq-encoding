@@ -118,8 +118,8 @@ abstract class Encoder
      * @param  string $type
      * @param  mixed  $input
      * @return bool
-     * @since  4.0
      * @throws froq\encoding\EncodingException
+     * @since  4.0
      */
     public static final function isEncoded(string $type, mixed $input): bool
     {
