@@ -82,7 +82,7 @@ class JsonEncoder extends Encoder
 
             // Prettify if requested.
             if ($this->options['indent']) {
-                $input = $this->pretty($input, $this->options['indent']);
+                $input = self::prettify($input, $this->options['indent']);
             }
 
             $this->input = $input;
@@ -134,7 +134,7 @@ class JsonEncoder extends Encoder
      * @throws froq\encoding\encoder\EncoderException
      * @thanks https://github.com/ergebnis/json-printer
      */
-    public function pretty(string $json, string|int $indent = "  ", string $newLine = "\n"): string
+    public static function prettify(string $json, string|int $indent = "  ", string $newLine = "\n"): string
     {
         // When indent count given (@permissive-type).
         is_numeric($indent) && $indent = str_repeat(' ', (int) $indent);
