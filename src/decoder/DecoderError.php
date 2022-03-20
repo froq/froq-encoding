@@ -5,15 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace froq\encoding\encoder;
+namespace froq\encoding\decoder;
 
 /**
- * @package froq\encoding\encoder
- * @object  froq\encoding\encoder\EncoderError
+ * @package froq\encoding\decoder
+ * @object  froq\encoding\decoder\DecoderError
  * @author  Kerem Güneş
  * @since   6.0
  */
-class EncoderError extends \froq\encoding\EncodingError
+class DecoderError extends \froq\encoding\EncodingError
 {
     /**
      * Codes.

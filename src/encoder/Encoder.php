@@ -7,27 +7,17 @@ declare(strict_types=1);
 
 namespace froq\encoding\encoder;
 
-use froq\common\trait\OptionTrait;
+use froq\common\trait\{OptionTrait, InputTrait};
 
 /**
- * Encoder.
- *
  * @package froq\encoding\encoder
  * @object  froq\encoding\encoder\Encoder
  * @author  Kerem Güneş
- * @since   4.0, 6.0
+ * @since   6.0
  */
 abstract class Encoder
 {
-    use OptionTrait;
-
-    /** @const string */
-    public final const TYPE_GZIP = 'gzip',
-                       TYPE_JSON = 'json',
-                       TYPE_XML  = 'xml';
-
-    /** @var mixed */
-    protected mixed $input;
+    use OptionTrait, InputTrait;
 
     /**
      * Constructor.
@@ -37,79 +27,34 @@ abstract class Encoder
      */
     public function __construct(array $options = null, array $optionsDefault = null)
     {
-        // When defined in subclass.
-        $optionsDefault ??= static::$optionsDefault ?? null;
+        $optionsDefault ??= self::getDefaultOptions();
 
-        // Select string keys only (map=true).
-        $options = array_options($options, $optionsDefault, map: true);
-
-        $this->setOptions($options);
+        $this->setOptions(array_options($options, $optionsDefault));
     }
 
     /**
-     * Set input.
+     * Convert.
      *
-     * @param  mixed $input
-     * @return self
+     * @param  froq\encoding\encoder\EncoderError|null &$error
+     * @return bool
+     * @causes froq\encoding\encoder\EncoderException
      */
-    public function setInput(mixed $input): self
+    public function convert(mixed $input, EncoderError &$error = null): mixed
     {
-        $this->input = $input;
+        ($that = clone $this)->setInput($input)->encode($error);
 
-        return $this;
+        return $that->getInput();
     }
 
     /**
-     * Get input.
-     *
-     * @return mixed
-     */
-    public function getInput(): mixed
-    {
-        return $this->input;
-    }
-
-    /**
-     * Flush input data.
+     * Ensure `setInput()` called for setting `$input` property for encode/decode calls.
      *
      * @return void
+     * @causes froq\encoding\encoder\EncoderException
      */
-    public function flush(): void
+    protected function ensureInput(): void
     {
-        $this->input = null;
-    }
-
-    /**
-     * Create an error.
-     *
-     * @param  Throwable $e
-     * @param  int|null  $code
-     * @return froq\encoding\encoder\EncoderError
-     */
-    public final function error(\Throwable $e, int $code = null): EncoderError
-    {
-        return new EncoderError($e, code: $code ?? $e->getCode());
-    }
-
-    /**
-     * Create an encoder instance.
-     *
-     * @param  string     $type
-     * @param  array|null $options
-     * @return froq\encoding\encoder\Encoder
-     */
-    public static final function create(string $type, array $options = null): Encoder
-    {
-        return match ($type) {
-            self::TYPE_GZIP => new GzipEncoder($options),
-            self::TYPE_JSON => new JsonEncoder($options),
-            self::TYPE_XML  => new XmlEncoder($options),
-
-            // Not implemented.
-            default => throw new EncoderException(
-                'Invalid type `%s` [valids: gzip, json, xml]', $type
-            )
-        };
+        $this->checkInput(EncoderException::class);
     }
 
     /**
@@ -118,29 +63,38 @@ abstract class Encoder
      * @param  string $type
      * @param  mixed  $input
      * @return bool
-     * @throws froq\encoding\EncodingException
-     * @since  4.0
+     * @throws froq\encoding\encoder\EncoderException
      */
-    public static final function isEncoded(string $type, mixed $input): bool
+    protected static function isEncoded(string $type, mixed $input): bool
     {
+        // Special case of JSON stuff.
+        if ($type == 'json' && is_string($input) && (
+            is_numeric($input) || equals($input, 'null', 'true', 'false')
+        )) {
+            return true;
+        }
+
         return match ($type) {
             'json' => is_string($input)
                    && isset($input[0], $input[-1])
                    && (
-                        ($input[0] . $input[-1]) === '{}' ||
-                        ($input[0] . $input[-1]) === '[]' ||
-                        ($input[0] . $input[-1]) === '""'
+                        ($input[0] . $input[-1]) == '{}' ||
+                        ($input[0] . $input[-1]) == '[]' ||
+                        ($input[0] . $input[-1]) == '""'
                       ),
             'xml' => is_string($input)
                   && isset($input[0], $input[-1])
                   && (
-                        ($input[0] . $input[-1]) === '<>'
+                        ($input[0] . $input[-1]) == '<>'
                      ),
             'gzip' => is_string($input)
                    && str_starts_with($input, "\x1F\x8B"),
 
-            default => throw new EncodingException(
-                'Invalid type `%s` [valids: gzip, json, xml]', $type
+            'zlib' => is_string($input)
+                   && str_starts_with($input, "\x78\xDA"),
+
+            default => throw new EncoderException(
+                'Invalid type `%s` [valids: json, xml, gzip, zlib]', $type
             )
         };
     }
@@ -150,14 +104,7 @@ abstract class Encoder
      *
      * @param  froq\encoding\encoder\EncoderError|null &$error
      * @return bool
+     * @causes froq\encoding\encoder\EncoderException
      */
     abstract public function encode(EncoderError &$error = null): bool;
-
-    /**
-     * Decode.
-     *
-     * @param  froq\encoding\encoder\EncoderError|null &$error
-     * @return bool
-     */
-    abstract public function decode(EncoderError &$error = null): bool;
 }

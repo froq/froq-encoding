@@ -7,42 +7,40 @@ declare(strict_types=1);
 
 namespace froq\encoding\encoder;
 
-use froq\dom\Dom;
-
 /**
  * @package froq\encoding\encoder
- * @object  froq\encoding\encoder\XmlEncoder
+ * @object  froq\encoding\encoder\GZipEncoder
  * @author  Kerem Güneş
  * @since   6.0
  */
-class XmlEncoder extends Encoder
+class GZipEncoder extends Encoder
 {
     /** @var array */
-    protected static array $optionsDefault = [
-        'charset' => 'utf-8', 'indent' => false, 'indentString' => '  ',
-    ];
+    protected static array $optionsDefault = ['level' => -1];
 
     /**
      * @inheritDoc froq\encoding\encoder\Encoder
      */
     public function encode(EncoderError &$error = null): bool
     {
+        $this->ensureInput();
+
         $error = null;
 
-        // Wrap for type/dom errors etc.
+        // Wrap for type errors etc.
         try {
-            $this->input = Dom::createXmlDocument(
-                    $this->input,
-                    $this->getOption('charset')
-                )->toString(
-                    $this->getOptions(
-                        ['indent', 'indentString'],
-                        combine: true
-                    )
-                );
+            $this->input = gzencode(
+                $this->input,
+                $this->options['level'],
+                FORCE_GZIP
+            );
+
+            if ($this->input === false) {
+                throw new \LastError();
+            }
         } catch (\Throwable $e) {
             $error = new EncoderError(
-                $e->getMessage(), code: EncoderError::XML, cause: $e
+                $e->getMessage(), code: EncoderError::GZIP, cause: $e
             );
         }
 
@@ -54,6 +52,6 @@ class XmlEncoder extends Encoder
      */
     public static function isEncoded(mixed $input, mixed $_ = null): bool
     {
-        return parent::isEncoded('xml', $input);
+        return parent::isEncoded('gzip', $input);
     }
 }

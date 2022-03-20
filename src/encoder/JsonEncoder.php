@@ -8,8 +8,6 @@ declare(strict_types=1);
 namespace froq\encoding\encoder;
 
 /**
- * Json Encoder.
- *
  * @package froq\encoding\encoder
  * @object  froq\encoding\encoder\JsonEncoder
  * @author  Kerem Güneş
@@ -17,24 +15,14 @@ namespace froq\encoding\encoder;
  */
 class JsonEncoder extends Encoder
 {
-    /**
-     * Default encode flags.
-     * @const int
-     */
-    public final const ENCODE_FLAGS = JSON_PRESERVE_ZERO_FRACTION
-                                    | JSON_UNESCAPED_SLASHES
-                                    | JSON_UNESCAPED_UNICODE;
-
-    /**
-     * Default decode flags.
-     * @const int
-     */
-    public final const DECODE_FLAGS = JSON_BIGINT_AS_STRING;
+    /** @const int */
+    public const FLAGS = JSON_PRESERVE_ZERO_FRACTION
+                       | JSON_UNESCAPED_SLASHES
+                       | JSON_UNESCAPED_UNICODE;
 
     /** @var array */
     protected static array $optionsDefault = [
-        'flags' => 0,    'depth'  => 512,
-        'assoc' => null, 'indent' => null,
+        'flags' => 0, 'depth' => 512, 'indent' => null
     ];
 
     /**
@@ -44,12 +32,7 @@ class JsonEncoder extends Encoder
      */
     public function __construct(array $options = null)
     {
-        // If false given with JSON_OBJECT_AS_ARRAY flag, simply false overrides.
-        if (isset($options['assoc'])) {
-            $options['assoc'] = (bool) $options['assoc'];
-        }
-
-        // Pevent pretty print corruption.
+        // Prevent pretty print corruption.
         if (isset($options['indent'])) {
             $options['flags'] ??= 0;
             $options['flags'] &= ~JSON_PRETTY_PRINT;
@@ -63,6 +46,8 @@ class JsonEncoder extends Encoder
      */
     public function encode(EncoderError &$error = null, object $object = null): bool
     {
+        $object || $this->ensureInput();
+
         $error = null;
 
         // Wrap for type errors etc.
@@ -70,65 +55,42 @@ class JsonEncoder extends Encoder
             // Get object variables to input if given.
             $object && $this->input = get_object_vars($object);
 
-            $input = json_encode(
+            $this->input = json_encode(
                 $this->input,
-                $this->options['flags'] |= self::ENCODE_FLAGS,
+                $this->options['flags'] |= self::FLAGS,
                 $this->options['depth'],
             );
 
-            if (json_last_error()) {
-                throw new \Error(json_last_error_msg());
+            if ($error = json_error_message()) {
+                throw new \LastError($error);
             }
 
             // Prettify if requested.
             if ($this->options['indent']) {
-                $input = self::prettify($input, $this->options['indent']);
+                $this->input = self::prettify($this->input, $this->options['indent']);
             }
-
-            $this->input = $input;
         } catch (\Throwable $e) {
-            $error = $this->error($e, code: EncoderError::JSON);
+            $error = new EncoderError(
+                $e->getMessage(), code: EncoderError::JSON, cause: $e
+            );
         }
 
         return ($error == null);
     }
 
     /**
-     * @inheritDoc froq\encoding\encoder\Encoder
+     * @override
      */
-    public function decode(EncoderError &$error = null, object $object = null): bool
+    public static function isEncoded(mixed $input, mixed $_ = null): bool
     {
-        $error = null;
-
-        // Wrap for type errors etc.
-        try {
-            $input = json_decode(
-                $this->input,
-                $this->options['assoc'],
-                $this->options['depth'],
-                $this->options['flags'] |= self::DECODE_FLAGS,
-            );
-
-            if (json_last_error()) {
-                throw new \Error(json_last_error_msg());
-            }
-
-            $this->input = $input;
-
-            // Set object variables from input if given.
-            $object && set_object_vars($object, $this->input);
-        } catch (\Throwable $e) {
-            $error = $this->error($e, code: EncoderError::JSON);
-        }
-
-        return ($error == null);
+        return parent::isEncoded('json', $input);
     }
 
     /**
      * Pretty print with indent option.
      *
      * @param  string     $json
-     * @param  int|string $indent
+     * @param  string|int $indent
      * @param  string     $newLine
      * @return string
      * @throws froq\encoding\encoder\EncoderException
@@ -136,6 +98,11 @@ class JsonEncoder extends Encoder
      */
     public static function prettify(string $json, string|int $indent = "  ", string $newLine = "\n"): string
     {
+        // When no indent available.
+        if (!$json || !strpbrk($json, '{[')) {
+            return $json;
+        }
+
         // When indent count given (@permissive-type).
         is_numeric($indent) && $indent = str_repeat(' ', (int) $indent);
 

@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace froq\encoding\encoder;
+namespace froq\encoding\codec;
 
 /**
- * @package froq\encoding\encoder
- * @object  froq\encoding\encoder\EncoderException
+ * @package froq\encoding\codec
+ * @object  froq\encoding\codec\CodecException
  * @author  Kerem Güneş
  * @since   6.0
  */
-class EncoderException extends \froq\encoding\EncodingException
+class CodecException extends \froq\encoding\EncodingException
 {}
