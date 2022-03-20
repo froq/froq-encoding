@@ -7,15 +7,11 @@ declare(strict_types=1);
 
 namespace froq\encoding;
 
-use froq\common\Exception;
-
 /**
- * Encoding Exception.
- *
  * @package froq\encoding
  * @object  froq\encoding\EncodingException
  * @author  Kerem Güneş
  * @since   3.0
  */
-class EncodingException extends Exception
+class EncodingException extends \froq\common\Exception
 {}
