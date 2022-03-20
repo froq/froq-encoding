@@ -12,6 +12,7 @@ namespace froq\encoding;
  * @object  froq\encoding\Encoding
  * @author  Kerem Güneş
  * @since   6.0
+ * @enum
  */
 class Encoding extends \froq\common\object\Enum
 {
