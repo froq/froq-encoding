@@ -16,9 +16,9 @@ namespace froq\encoding\encoder;
 class JsonEncoder extends Encoder
 {
     /** @const int */
-    public const FLAGS = JSON_PRESERVE_ZERO_FRACTION
-                       | JSON_UNESCAPED_SLASHES
-                       | JSON_UNESCAPED_UNICODE;
+    public final const FLAGS = JSON_PRESERVE_ZERO_FRACTION
+                             | JSON_UNESCAPED_SLASHES
+                             | JSON_UNESCAPED_UNICODE;
 
     /** @var array */
     protected static array $optionsDefault = [

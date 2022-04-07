@@ -16,7 +16,7 @@ namespace froq\encoding\decoder;
 class JsonDecoder extends Decoder
 {
     /** @const int */
-    public const FLAGS = JSON_BIGINT_AS_STRING;
+    public final const FLAGS = JSON_BIGINT_AS_STRING;
 
     /** @var array */
     protected static array $optionsDefault = [
