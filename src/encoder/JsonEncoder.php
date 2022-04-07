@@ -16,9 +16,9 @@ namespace froq\encoding\encoder;
 class JsonEncoder extends Encoder
 {
     /** @const int */
-    public final const FLAGS = JSON_PRESERVE_ZERO_FRACTION
-                             | JSON_UNESCAPED_SLASHES
-                             | JSON_UNESCAPED_UNICODE;
+    public const FLAGS = JSON_PRESERVE_ZERO_FRACTION
+                       | JSON_UNESCAPED_SLASHES
+                       | JSON_UNESCAPED_UNICODE;
 
     /** @var array */
     protected static array $optionsDefault = [
@@ -57,7 +57,7 @@ class JsonEncoder extends Encoder
 
             $this->input = json_encode(
                 $this->input,
-                $this->options['flags'] |= self::FLAGS,
+                $this->options['flags'] |= static::FLAGS,
                 $this->options['depth'],
             );
 

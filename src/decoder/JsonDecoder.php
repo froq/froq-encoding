@@ -16,7 +16,7 @@ namespace froq\encoding\decoder;
 class JsonDecoder extends Decoder
 {
     /** @const int */
-    public final const FLAGS = JSON_BIGINT_AS_STRING;
+    public const FLAGS = JSON_BIGINT_AS_STRING;
 
     /** @var array */
     protected static array $optionsDefault = [
@@ -56,7 +56,7 @@ class JsonDecoder extends Decoder
                 $this->input,
                 $this->options['assoc'],
                 $this->options['depth'],
-                $this->options['flags'] |= self::FLAGS,
+                $this->options['flags'] |= static::FLAGS,
             );
 
             if ($error = json_error_message()) {
