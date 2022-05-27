@@ -88,10 +88,14 @@ abstract class Encoder
                         ($input[0] . $input[-1]) == '<>'
                      ),
             'gzip' => is_string($input)
-                   && str_starts_with($input, "\x1F\x8B"),
+                   && str_starts_with($input, "\x1F\x8B"), // Constant.
 
             'zlib' => is_string($input)
-                   && str_starts_with($input, "\x78\xDA"),
+                   && (
+                        str_starts_with($input, "\x78\x9C") || // Default.
+                        str_starts_with($input, "\x78\xDA") || // Best.
+                        str_starts_with($input, "\x78\x01")    // None/low.
+                      ),
 
             default => throw new EncoderException(
                 'Invalid type `%s` [valids: json, xml, gzip, zlib]', $type
