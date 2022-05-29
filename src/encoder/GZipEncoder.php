@@ -29,13 +29,13 @@ class GZipEncoder extends Encoder
 
         // Wrap for type errors etc.
         try {
-            $this->input = gzencode(
+            $this->output = gzencode(
                 $this->input,
                 $this->options['level'],
                 FORCE_GZIP
             );
 
-            if ($this->input === false) {
+            if ($this->output === false) {
                 throw new \LastError();
             }
         } catch (\Throwable $e) {

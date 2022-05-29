@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace froq\encoding\encoder;
 
-use froq\common\trait\{OptionTrait, InputTrait};
+use froq\common\trait\{OptionTrait, InputTrait, OutputTrait};
 
 /**
  * @package froq\encoding\encoder
@@ -17,7 +17,7 @@ use froq\common\trait\{OptionTrait, InputTrait};
  */
 abstract class Encoder
 {
-    use OptionTrait, InputTrait;
+    use OptionTrait, InputTrait, OutputTrait;
 
     /**
      * Constructor.
@@ -43,7 +43,7 @@ abstract class Encoder
     {
         ($that = clone $this)->setInput($input)->encode($error);
 
-        return $that->getInput();
+        return $that->getOutput();
     }
 
     /**

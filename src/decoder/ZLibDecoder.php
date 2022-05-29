@@ -29,12 +29,12 @@ class ZLibDecoder extends Decoder
 
         // Wrap for type errors etc.
         try {
-            $this->input = zlib_decode(
+            $this->output = zlib_decode(
                 $this->input,
                 $this->options['length']
             );
 
-            if ($this->input === false) {
+            if ($this->output === false) {
                 throw new \LastError();
             }
         } catch (\Throwable $e) {

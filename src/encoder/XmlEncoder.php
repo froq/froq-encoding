@@ -27,11 +27,13 @@ class XmlEncoder extends Encoder
      */
     public function encode(EncoderError &$error = null): bool
     {
+        $this->ensureInput();
+
         $error = null;
 
         // Wrap for type/dom errors etc.
         try {
-            $this->input = Dom::createXmlDocument(
+            $this->output = Dom::createXmlDocument(
                     $this->input,
                     $this->getOption('charset')
                 )->toString(

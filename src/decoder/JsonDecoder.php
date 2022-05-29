@@ -52,7 +52,7 @@ class JsonDecoder extends Decoder
 
         // Wrap for type errors etc.
         try {
-            $this->input = json_decode(
+            $this->output = json_decode(
                 $this->input,
                 $this->options['assoc'],
                 $this->options['depth'],
@@ -63,8 +63,8 @@ class JsonDecoder extends Decoder
                 throw new \LastError($error);
             }
 
-            // Set object variables from input if given.
-            $object && $this->input = set_object_vars($object, $this->input);
+            // Set object variables from output if given.
+            $object && $this->output = set_object_vars($object, $this->output);
         } catch (\Throwable $e) {
             $error = new DecoderError(
                 $e->getMessage(), code: DecoderError::JSON, cause: $e

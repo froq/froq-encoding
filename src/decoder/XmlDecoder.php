@@ -29,11 +29,13 @@ class XmlDecoder extends Decoder
      */
     public function decode(DecoderError &$error = null): bool
     {
+        $this->ensureInput();
+
         $error = null;
 
         // Wrap for type/dom errors etc.
         try {
-            $this->input = Dom::parseXml(
+            $this->output = Dom::parseXml(
                 $this->input,
                 $this->getOptions(
                     ['validateOnParse', 'preserveWhiteSpace', 'strictErrorChecking',

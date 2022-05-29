@@ -55,7 +55,7 @@ class JsonEncoder extends Encoder
             // Get object variables to input if given.
             $object && $this->input = get_object_vars($object);
 
-            $this->input = json_encode(
+            $this->output = json_encode(
                 $this->input,
                 $this->options['flags'] |= static::FLAGS,
                 $this->options['depth'],
@@ -67,7 +67,7 @@ class JsonEncoder extends Encoder
 
             // Prettify if requested.
             if ($this->options['indent']) {
-                $this->input = self::prettify($this->input, $this->options['indent']);
+                $this->output = self::prettify($this->output, $this->options['indent']);
             }
         } catch (\Throwable $e) {
             $error = new EncoderError(

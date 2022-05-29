@@ -79,7 +79,7 @@ abstract class Codec
     {
         ($encoder = $this->__get('encoder'))->setInput($input)->encode($error);
 
-        return $encoder->getInput();
+        return $encoder->getOutput();
     }
 
     /**
@@ -93,7 +93,7 @@ abstract class Codec
     {
         ($decoder = $this->__get('decoder'))->setInput($input)->decode($error);
 
-        return $decoder->getInput();
+        return $decoder->getOutput();
     }
 
     /**

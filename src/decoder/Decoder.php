@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace froq\encoding\decoder;
 
-use froq\common\trait\{OptionTrait, InputTrait};
+use froq\common\trait\{OptionTrait, InputTrait, OutputTrait};
 
 /**
  * @package froq\encoding\decoder
@@ -17,7 +17,7 @@ use froq\common\trait\{OptionTrait, InputTrait};
  */
 abstract class Decoder
 {
-    use OptionTrait, InputTrait;
+    use OptionTrait, InputTrait, OutputTrait;
 
     /**
      * Constructor.
@@ -32,7 +32,7 @@ abstract class Decoder
         $this->setOptions(array_options($options, $optionsDefault));
     }
 
-     /**
+    /**
      * Convert.
      *
      * @param  mixed                                    $input
@@ -43,7 +43,7 @@ abstract class Decoder
     {
         ($that = clone $this)->setInput($input)->decode($error);
 
-        return $that->getInput();
+        return $that->getOutput();
     }
 
     /**

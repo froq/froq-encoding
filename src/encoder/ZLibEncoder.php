@@ -29,13 +29,13 @@ class ZLibEncoder extends Encoder
 
         // Wrap for type errors etc.
         try {
-            $this->input = zlib_encode(
+            $this->output = zlib_encode(
                 $this->input,
                 ZLIB_ENCODING_DEFLATE,
                 $this->options['level']
             );
 
-            if ($this->input === false) {
+            if ($this->output === false) {
                 throw new \LastError();
             }
         } catch (\Throwable $e) {
