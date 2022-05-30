@@ -44,15 +44,18 @@ abstract class Encoder
     /**
      * Convert.
      *
+     * @param  mixed                                    $input
      * @param  froq\encoding\encoder\EncoderError|null &$error
-     * @return bool
-     * @causes froq\encoding\encoder\EncoderException
+     * @return mixed|false
      */
     public function convert(mixed $input, EncoderError &$error = null): mixed
     {
-        ($that = clone $this)->setInput($input)->encode($error);
+        $this->setInput($input);
 
-        return $that->getOutput();
+        if ($this->encode($error)) {
+            return $this->getOutput();
+        }
+        return false;
     }
 
     /**

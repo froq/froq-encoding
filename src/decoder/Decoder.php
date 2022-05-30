@@ -46,13 +46,16 @@ abstract class Decoder
      *
      * @param  mixed                                    $input
      * @param  froq\encoding\decoder\DecoderError|null &$error
-     * @return mixed
+     * @return mixed|false
      */
     public function convert(mixed $input, DecoderError &$error = null): mixed
     {
-        ($that = clone $this)->setInput($input)->decode($error);
+        $this->setInput($input);
 
-        return $that->getOutput();
+        if ($this->decode($error)) {
+            return $this->getOutput();
+        }
+        return false;
     }
 
     /**
