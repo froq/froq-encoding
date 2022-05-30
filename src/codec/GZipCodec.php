@@ -11,6 +11,8 @@ use froq\encoding\encoder\GZipEncoder;
 use froq\encoding\decoder\GZipDecoder;
 
 /**
+ *  GZip codec class, provides encode/decode operations for GZip related jobs.
+ *
  * @package froq\encoding\codec
  * @object  froq\encoding\codec\GZipCodec
  * @author  Kerem Güneş

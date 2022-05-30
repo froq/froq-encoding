@@ -12,11 +12,14 @@ use froq\encoding\decoder\{Decoder, DecoderError};
 use froq\common\trait\OptionTrait;
 
 /**
+ * Base class of other codec classes, creates encoder/decoder properties via `__get()`
+ * method for once and provides encode/decode operations for subclasses using these
+ * properties.
+ *
  * @package froq\encoding\codec
  * @object  froq\encoding\codec\Codec
  * @author  Kerem Güneş
  * @since   6.0
- * @internal
  */
 abstract class Codec
 {
@@ -41,6 +44,7 @@ abstract class Codec
     /**
      * Forbid dynamic modifications.
      *
+     * @return never
      * @throws ReadonlyPropertyError
      * @throws UndefinedPropertyError
      */
@@ -55,6 +59,7 @@ abstract class Codec
     /**
      * Get encoder/decoder properties creating on-demand for once.
      *
+     * @return froq\encoding\encoder\Encoder|froq\encoding\decoder\Decoder
      * @throws UndefinedPropertyError
      */
     public function __get(string $property): Encoder|Decoder

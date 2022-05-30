@@ -11,6 +11,8 @@ use froq\encoding\encoder\XmlEncoder;
 use froq\encoding\decoder\XmlDecoder;
 
 /**
+ * XML codec class, provides encode/decode operations for XML related jobs.
+ *
  * @package froq\encoding\codec
  * @object  froq\encoding\codec\XmlCodec
  * @author  Kerem Güneş

@@ -11,6 +11,8 @@ use froq\encoding\encoder\JsonEncoder;
 use froq\encoding\decoder\JsonDecoder;
 
 /**
+ * JSON codec class, provides encode/decode operations for JSON related jobs.
+ *
  * @package froq\encoding\codec
  * @object  froq\encoding\codec\JsonCodec
  * @author  Kerem Güneş

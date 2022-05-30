@@ -11,6 +11,8 @@ use froq\encoding\encoder\ZLibEncoder;
 use froq\encoding\decoder\ZLibDecoder;
 
 /**
+ * ZLib codec class, provides encode/decode operations for ZLib related jobs.
+ *
  * @package froq\encoding\codec
  * @object  froq\encoding\codec\ZLibCodec
  * @author  Kerem Güneş
