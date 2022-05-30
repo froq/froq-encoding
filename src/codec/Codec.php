@@ -9,7 +9,7 @@ namespace froq\encoding\codec;
 
 use froq\encoding\encoder\{Encoder, EncoderError};
 use froq\encoding\decoder\{Decoder, DecoderError};
-use froq\common\trait\{OptionTrait, SealTrait};
+use froq\common\trait\OptionTrait;
 
 /**
  * @package froq\encoding\codec
@@ -20,7 +20,7 @@ use froq\common\trait\{OptionTrait, SealTrait};
  */
 abstract class Codec
 {
-    use OptionTrait, SealTrait;
+    use OptionTrait;
 
     /** @var froq\encoding\encoder\Encoder */
     private readonly Encoder $encoder;
@@ -36,9 +36,6 @@ abstract class Codec
     public function __construct(array $options = null)
     {
         $this->setOptions($options);
-
-        // Seal for only allowed codec classes.
-        self::seal([GZipCodec::class, ZLibCodec::class, JsonCodec::class, XmlCodec::class]);
     }
 
     /**
