@@ -31,9 +31,9 @@ class XmlDecoder extends Decoder
      */
     public function decode(DecoderError &$error = null): bool
     {
-        $this->ensureInput();
-
         $error = null;
+
+        $this->inputCheck();
 
         // Wrap for type/dom errors etc.
         try {
@@ -49,6 +49,8 @@ class XmlDecoder extends Decoder
             $error = new DecoderError(
                 $e->getMessage(), code: DecoderError::XML, cause: $e
             );
+
+            $this->errorCheck($error);
         }
 
         return ($error == null);

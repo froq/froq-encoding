@@ -29,9 +29,9 @@ class XmlEncoder extends Encoder
      */
     public function encode(EncoderError &$error = null): bool
     {
-        $this->ensureInput();
-
         $error = null;
+
+        $this->inputCheck();
 
         // Wrap for type/dom errors etc.
         try {
@@ -48,6 +48,8 @@ class XmlEncoder extends Encoder
             $error = new EncoderError(
                 $e->getMessage(), code: EncoderError::XML, cause: $e
             );
+
+            $this->errorCheck($error);
         }
 
         return ($error == null);

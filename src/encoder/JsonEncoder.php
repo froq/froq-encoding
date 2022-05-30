@@ -48,9 +48,9 @@ class JsonEncoder extends Encoder
      */
     public function encode(EncoderError &$error = null, object $object = null): bool
     {
-        $object || $this->ensureInput();
-
         $error = null;
+
+        $object || $this->inputCheck();
 
         // Wrap for type errors etc.
         try {
@@ -64,7 +64,7 @@ class JsonEncoder extends Encoder
             );
 
             if ($error = json_error_message()) {
-                throw new \LastError($error);
+                throw new \JsonError($error);
             }
 
             // Prettify if requested.
@@ -75,6 +75,8 @@ class JsonEncoder extends Encoder
             $error = new EncoderError(
                 $e->getMessage(), code: EncoderError::JSON, cause: $e
             );
+
+            $this->errorCheck($error);
         }
 
         return ($error == null);

@@ -48,9 +48,9 @@ class JsonDecoder extends Decoder
      */
     public function decode(DecoderError &$error = null, object $object = null): bool
     {
-        $this->ensureInput();
-
         $error = null;
+
+        $this->inputCheck();
 
         // Wrap for type errors etc.
         try {
@@ -62,7 +62,7 @@ class JsonDecoder extends Decoder
             );
 
             if ($error = json_error_message()) {
-                throw new \LastError($error);
+                throw new \JsonError($error);
             }
 
             // Set object variables from output if given.
@@ -71,6 +71,8 @@ class JsonDecoder extends Decoder
             $error = new DecoderError(
                 $e->getMessage(), code: DecoderError::JSON, cause: $e
             );
+
+            $this->errorCheck($error);
         }
 
         return ($error == null);

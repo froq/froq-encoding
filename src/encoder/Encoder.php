@@ -59,11 +59,31 @@ abstract class Encoder
      * Ensure `setInput()` called to set `$input` property for `encode()` calls.
      *
      * @return void
-     * @causes froq\encoding\encoder\EncoderException
+     * @throws froq\encoding\encoder\EncoderException
      */
-    protected function ensureInput(): void
+    protected function inputCheck(): void
     {
-        $this->checkInput(EncoderException::class);
+        if (!$this->hasInput()) {
+            throw new EncoderException(
+                'No input given yet, call %s::setInput() first',
+                static::class
+            );
+        }
+    }
+
+    /**
+     * Handle given error for `encode()` calls, if error is not null and
+     * option `throwsErrors` not false.
+     *
+     * @param  froq\encoding\encoder\EncoderError $error
+     * @return void
+     * @throws froq\encoding\encoder\EncoderError
+     */
+    protected function errorCheck(EncoderError $error): void
+    {
+        if ($this->options['throwErrors']) {
+            throw $error;
+        }
     }
 
     /**
@@ -117,7 +137,7 @@ abstract class Encoder
      *
      * @param  froq\encoding\encoder\EncoderError|null &$error
      * @return bool
-     * @causes froq\encoding\encoder\EncoderException
+     * @causes froq\encoding\encoder\{EncoderError|EncoderException}
      */
     abstract public function encode(EncoderError &$error = null): bool;
 }

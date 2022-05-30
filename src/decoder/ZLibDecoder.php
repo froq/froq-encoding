@@ -25,9 +25,9 @@ class ZLibDecoder extends Decoder
      */
     public function decode(DecoderError &$error = null): bool
     {
-        $this->ensureInput();
-
         $error = null;
+
+        $this->inputCheck();
 
         // Wrap for type errors etc.
         try {
@@ -43,6 +43,8 @@ class ZLibDecoder extends Decoder
             $error = new DecoderError(
                 $e->getMessage(), code: DecoderError::ZLIB, cause: $e
             );
+
+            $this->errorCheck($error);
         }
 
         return ($error == null);

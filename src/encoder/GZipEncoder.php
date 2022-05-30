@@ -25,9 +25,9 @@ class GZipEncoder extends Encoder
      */
     public function encode(EncoderError &$error = null): bool
     {
-        $this->ensureInput();
-
         $error = null;
+
+        $this->inputCheck();
 
         // Wrap for type errors etc.
         try {
@@ -44,6 +44,8 @@ class GZipEncoder extends Encoder
             $error = new EncoderError(
                 $e->getMessage(), code: EncoderError::GZIP, cause: $e
             );
+
+            $this->errorCheck($error);
         }
 
         return ($error == null);

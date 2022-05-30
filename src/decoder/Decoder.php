@@ -59,11 +59,31 @@ abstract class Decoder
      * Ensure `setInput()` called to set `$input` property for `decode()` calls.
      *
      * @return void
-     * @causes froq\encoding\decoder\DecoderException
+     * @throws froq\encoding\decoder\DecoderException
      */
-    protected function ensureInput(): void
+    protected function inputCheck(): void
     {
-        $this->checkInput(DecoderException::class);
+        if (!$this->hasInput()) {
+            throw new DecoderException(
+                'No input given yet, call %s::setInput() first',
+                static::class
+            );
+        }
+    }
+
+    /**
+     * Handle given error for `decode()` calls, if error is not null and
+     * option `throwsErrors` not false.
+     *
+     * @param  froq\encoding\decoder\DecoderError $error
+     * @return void
+     * @throws froq\encoding\decoder\DecoderError
+     */
+    protected function errorCheck(DecoderError $error): void
+    {
+        if ($this->options['throwErrors']) {
+            throw $error;
+        }
     }
 
     /**
@@ -71,7 +91,7 @@ abstract class Decoder
      *
      * @param  froq\encoding\decoder\DecoderError|null &$error
      * @return bool
-     * @causes froq\encoding\decoder\DecoderException
+     * @causes froq\encoding\decoder\{DecoderError|DecoderException}
      */
     abstract public function decode(DecoderError &$error = null): bool;
 }
