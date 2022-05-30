@@ -46,10 +46,8 @@ class JsonEncoder extends Encoder
     /**
      * @inheritDoc froq\encoding\encoder\Encoder
      */
-    public function encode(EncoderError &$error = null, object $object = null): bool
+    public function encode(object $object = null): bool
     {
-        $error = null;
-
         $object || $this->inputCheck();
 
         // Wrap for type errors etc.
@@ -63,8 +61,8 @@ class JsonEncoder extends Encoder
                 $this->options['depth'],
             );
 
-            if ($error = json_error_message()) {
-                throw new \JsonError($error);
+            if ($message = json_error_message()) {
+                throw new \JsonError($message);
             }
 
             // Prettify if requested.
@@ -72,14 +70,14 @@ class JsonEncoder extends Encoder
                 $this->output = self::prettify($this->output, $this->options['indent']);
             }
         } catch (\Throwable $e) {
-            $error = new EncoderError(
+            $this->error = new EncoderError(
                 $e->getMessage(), code: EncoderError::JSON, cause: $e
             );
 
-            $this->errorCheck($error);
+            $this->errorCheck();
         }
 
-        return ($error == null);
+        return ($this->error == null);
     }
 
     /**

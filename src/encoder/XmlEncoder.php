@@ -27,10 +27,8 @@ class XmlEncoder extends Encoder
     /**
      * @inheritDoc froq\encoding\encoder\Encoder
      */
-    public function encode(EncoderError &$error = null): bool
+    public function encode(): bool
     {
-        $error = null;
-
         $this->inputCheck();
 
         // Wrap for type/dom errors etc.
@@ -45,14 +43,14 @@ class XmlEncoder extends Encoder
                     )
                 );
         } catch (\Throwable $e) {
-            $error = new EncoderError(
+            $this->error = new EncoderError(
                 $e->getMessage(), code: EncoderError::XML, cause: $e
             );
 
-            $this->errorCheck($error);
+            $this->errorCheck();
         }
 
-        return ($error == null);
+        return ($this->error == null);
     }
 
     /**

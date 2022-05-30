@@ -78,13 +78,7 @@ abstract class Codec
      */
     public function encode(mixed $input, EncoderError|DecoderError &$error = null): mixed
     {
-        $encoder = $this->__get('encoder');
-        $encoder->setInput($input);
-
-        if ($encoder->encode($error)) {
-            return $encoder->getOutput();
-        }
-        return false;
+        return $this->__get('encoder')->convert($input, $error);
     }
 
     /**
@@ -96,13 +90,7 @@ abstract class Codec
      */
     public function decode(mixed $input, EncoderError|DecoderError &$error = null): mixed
     {
-        $decoder = $this->__get('decoder');
-        $decoder->setInput($input);
-
-        if ($decoder->decode($error)) {
-            return $decoder->getOutput();
-        }
-        return false;
+        return $this->__get('decoder')->convert($input, $error);
     }
 
     /**

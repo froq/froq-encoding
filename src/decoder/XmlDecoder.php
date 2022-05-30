@@ -29,10 +29,8 @@ class XmlDecoder extends Decoder
     /**
      * @inheritDoc froq\encoding\decoder\Decoder
      */
-    public function decode(DecoderError &$error = null): bool
+    public function decode(): bool
     {
-        $error = null;
-
         $this->inputCheck();
 
         // Wrap for type/dom errors etc.
@@ -46,13 +44,13 @@ class XmlDecoder extends Decoder
                 )
             );
         } catch (\Throwable $e) {
-            $error = new DecoderError(
+            $this->error = new DecoderError(
                 $e->getMessage(), code: DecoderError::XML, cause: $e
             );
 
-            $this->errorCheck($error);
+            $this->errorCheck();
         }
 
-        return ($error == null);
+        return ($this->error == null);
     }
 }

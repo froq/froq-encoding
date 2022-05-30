@@ -22,6 +22,9 @@ abstract class Encoder
 {
     use OptionTrait, InputTrait, OutputTrait;
 
+    /** @var froq\encoding\encoder\EncoderError|null */
+    protected ?EncoderError $error = null;
+
     /** @var array */
     protected static array $optionsDefault = ['throwErrors' => false];
 
@@ -42,6 +45,16 @@ abstract class Encoder
     }
 
     /**
+     * Get error property.
+     *
+     * @return froq\encoding\encoder\EncoderError|null
+     */
+    public function error(): EncoderError|null
+    {
+        return $this->error;
+    }
+
+    /**
      * Convert.
      *
      * @param  mixed                                    $input
@@ -52,10 +65,12 @@ abstract class Encoder
     {
         $this->setInput($input);
 
-        if ($this->encode($error)) {
-            return $this->getOutput();
+        if (!$this->encode()) {
+            $error = $this->error();
+            return false;
         }
-        return false;
+
+        return $this->getOutput();
     }
 
     /**
@@ -75,17 +90,15 @@ abstract class Encoder
     }
 
     /**
-     * Handle given error for `encode()` calls, if error is not null and
-     * option `throwsErrors` not false.
+     * Throw occured error on `decode()` calls if option `throwsErrors` not false.
      *
-     * @param  froq\encoding\encoder\EncoderError $error
      * @return void
      * @throws froq\encoding\encoder\EncoderError
      */
-    protected function errorCheck(EncoderError $error): void
+    protected function errorCheck(): void
     {
-        if ($this->options['throwErrors']) {
-            throw $error;
+        if ($this->error && $this->options['throwErrors']) {
+            throw $this->error;
         }
     }
 
@@ -138,9 +151,8 @@ abstract class Encoder
     /**
      * Encode.
      *
-     * @param  froq\encoding\encoder\EncoderError|null &$error
      * @return bool
      * @causes froq\encoding\encoder\{EncoderError|EncoderException}
      */
-    abstract public function encode(EncoderError &$error = null): bool;
+    abstract public function encode(): bool;
 }

@@ -22,6 +22,9 @@ abstract class Decoder
 {
     use OptionTrait, InputTrait, OutputTrait;
 
+    /** @var froq\encoding\encoder\DecoderError|null */
+    protected ?DecoderError $error = null;
+
     /** @var array */
     protected static array $optionsDefault = ['throwErrors' => false];
 
@@ -42,6 +45,16 @@ abstract class Decoder
     }
 
     /**
+     * Get error property.
+     *
+     * @return froq\encoding\encoder\DecoderError|null
+     */
+    public function error(): DecoderError|null
+    {
+        return $this->error;
+    }
+
+    /**
      * Convert.
      *
      * @param  mixed                                    $input
@@ -52,10 +65,12 @@ abstract class Decoder
     {
         $this->setInput($input);
 
-        if ($this->decode($error)) {
-            return $this->getOutput();
+        if (!$this->decode()) {
+            $error = $this->error();
+            return false;
         }
-        return false;
+
+        return $this->getOutput();
     }
 
     /**
@@ -75,26 +90,23 @@ abstract class Decoder
     }
 
     /**
-     * Handle given error for `decode()` calls, if error is not null and
-     * option `throwsErrors` not false.
+     * Throw occured error on `decode()` calls if option `throwsErrors` not false.
      *
-     * @param  froq\encoding\decoder\DecoderError $error
      * @return void
      * @throws froq\encoding\decoder\DecoderError
      */
-    protected function errorCheck(DecoderError $error): void
+    protected function errorCheck(): void
     {
-        if ($this->options['throwErrors']) {
-            throw $error;
+        if ($this->error && $this->options['throwErrors']) {
+            throw $this->error;
         }
     }
 
     /**
      * Decode.
      *
-     * @param  froq\encoding\decoder\DecoderError|null &$error
      * @return bool
      * @causes froq\encoding\decoder\{DecoderError|DecoderException}
      */
-    abstract public function decode(DecoderError &$error = null): bool;
+    abstract public function decode(): bool;
 }

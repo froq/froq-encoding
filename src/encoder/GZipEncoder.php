@@ -23,10 +23,8 @@ class GZipEncoder extends Encoder
     /**
      * @inheritDoc froq\encoding\encoder\Encoder
      */
-    public function encode(EncoderError &$error = null): bool
+    public function encode(): bool
     {
-        $error = null;
-
         $this->inputCheck();
 
         // Wrap for type errors etc.
@@ -41,14 +39,14 @@ class GZipEncoder extends Encoder
                 throw new \LastError();
             }
         } catch (\Throwable $e) {
-            $error = new EncoderError(
+            $this->error = new EncoderError(
                 $e->getMessage(), code: EncoderError::GZIP, cause: $e
             );
 
-            $this->errorCheck($error);
+            $this->errorCheck();
         }
 
-        return ($error == null);
+        return ($this->error == null);
     }
 
     /**

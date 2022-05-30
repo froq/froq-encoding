@@ -46,10 +46,8 @@ class JsonDecoder extends Decoder
     /**
      * @inheritDoc froq\encoding\decoder\Decoder
      */
-    public function decode(DecoderError &$error = null, object $object = null): bool
+    public function decode(object $object = null): bool
     {
-        $error = null;
-
         $this->inputCheck();
 
         // Wrap for type errors etc.
@@ -61,20 +59,20 @@ class JsonDecoder extends Decoder
                 $this->options['flags'] |= static::FLAGS,
             );
 
-            if ($error = json_error_message()) {
-                throw new \JsonError($error);
+            if ($message = json_error_message()) {
+                throw new \JsonError($message);
             }
 
             // Set object variables from output if given.
             $object && $this->output = set_object_vars($object, $this->output);
         } catch (\Throwable $e) {
-            $error = new DecoderError(
+            $this->error = new DecoderError(
                 $e->getMessage(), code: DecoderError::JSON, cause: $e
             );
 
-            $this->errorCheck($error);
+            $this->errorCheck();
         }
 
-        return ($error == null);
+        return ($this->error == null);
     }
 }
