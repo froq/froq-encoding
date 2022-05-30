@@ -74,13 +74,17 @@ abstract class Codec
      *
      * @param  mixed                                                                       $input
      * @param  froq\encoding\encoder\EncoderError|froq\encoding\decoder\DecoderError|null &$error
-     * @return mixed
+     * @return mixed|false
      */
     public function encode(mixed $input, EncoderError|DecoderError &$error = null): mixed
     {
-        ($encoder = $this->__get('encoder'))->setInput($input)->encode($error);
+        $encoder = $this->__get('encoder');
+        $encoder->setInput($input);
 
-        return $encoder->getOutput();
+        if ($encoder->encode($error)) {
+            return $encoder->getOutput();
+        }
+        return false;
     }
 
     /**
@@ -88,13 +92,17 @@ abstract class Codec
      *
      * @param  mixed                                                                       $input
      * @param  froq\encoding\encoder\EncoderError|froq\encoding\decoder\DecoderError|null &$error
-     * @return mixed
+     * @return mixed|false
      */
     public function decode(mixed $input, EncoderError|DecoderError &$error = null): mixed
     {
-        ($decoder = $this->__get('decoder'))->setInput($input)->decode($error);
+        $decoder = $this->__get('decoder');
+        $decoder->setInput($input);
 
-        return $decoder->getOutput();
+        if ($decoder->decode($error)) {
+            return $decoder->getOutput();
+        }
+        return false;
     }
 
     /**
