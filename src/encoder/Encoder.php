@@ -10,6 +10,9 @@ namespace froq\encoding\encoder;
 use froq\common\trait\{OptionTrait, InputTrait, OutputTrait};
 
 /**
+ * Base encoder class, provides `convert()` method and `encode()` method as abstract
+ * with other input/output related methods
+ *
  * @package froq\encoding\encoder
  * @object  froq\encoding\encoder\Encoder
  * @author  Kerem Güneş

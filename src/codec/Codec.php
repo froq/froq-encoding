@@ -12,9 +12,8 @@ use froq\encoding\decoder\{Decoder, DecoderError};
 use froq\common\trait\OptionTrait;
 
 /**
- * Base class of other codec classes, creates encoder/decoder properties via `__get()`
- * method for once and provides encode/decode operations for subclasses using these
- * properties.
+ * Base codec class, creates encoder/decoder properties via `__get()` method for once
+ * and provides encode/decode operations for subclasses using these properties.
  *
  * @package froq\encoding\codec
  * @object  froq\encoding\codec\Codec

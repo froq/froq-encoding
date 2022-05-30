@@ -10,8 +10,8 @@ namespace froq\encoding\decoder;
 use froq\common\trait\{OptionTrait, InputTrait, OutputTrait};
 
 /**
- * Base decoder class of other decoder classes, provides `convert()` method
- * and `decode()` method as abstract.
+ * Base decoder class, provides `convert()` method and `decode()` method as abstract
+ * with other input/output related methods.
  *
  * @package froq\encoding\decoder
  * @object  froq\encoding\decoder\Decoder
