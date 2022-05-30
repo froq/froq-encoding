@@ -10,6 +10,8 @@ namespace froq\encoding\encoder;
 use froq\dom\Dom;
 
 /**
+ * XML encoder class, provides encode operations for XML related jobs.
+ *
  * @package froq\encoding\encoder
  * @object  froq\encoding\encoder\XmlEncoder
  * @author  Kerem Güneş

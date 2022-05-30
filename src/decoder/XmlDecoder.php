@@ -10,6 +10,8 @@ namespace froq\encoding\decoder;
 use froq\dom\Dom;
 
 /**
+ * XML decoder class, provides decode operations for XML related jobs.
+ *
  * @package froq\encoding\decoder
  * @object  froq\encoding\decoder\XmlDecoder
  * @author  Kerem Güneş

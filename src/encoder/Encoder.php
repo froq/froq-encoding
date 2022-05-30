@@ -47,7 +47,7 @@ abstract class Encoder
     }
 
     /**
-     * Ensure `setInput()` called for setting `$input` property for encode/decode calls.
+     * Ensure `setInput()` called to set `$input` property for `encode()` calls.
      *
      * @return void
      * @causes froq\encoding\encoder\EncoderException

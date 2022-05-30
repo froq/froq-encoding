@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace froq\encoding\encoder;
 
 /**
+ * GZip encoder class, provides encode operations for GZip related jobs.
+ *
  * @package froq\encoding\encoder
  * @object  froq\encoding\encoder\GZipEncoder
  * @author  Kerem Güneş

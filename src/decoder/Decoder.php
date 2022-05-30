@@ -10,6 +10,9 @@ namespace froq\encoding\decoder;
 use froq\common\trait\{OptionTrait, InputTrait, OutputTrait};
 
 /**
+ * Base decoder class of other decoder classes, provides `convert()` method
+ * and `decode()` method as abstract.
+ *
  * @package froq\encoding\decoder
  * @object  froq\encoding\decoder\Decoder
  * @author  Kerem Güneş
@@ -47,7 +50,7 @@ abstract class Decoder
     }
 
     /**
-     * Ensure `setInput()` called for setting `$input` property for encode/decode calls.
+     * Ensure `setInput()` called to set `$input` property for `decode()` calls.
      *
      * @return void
      * @causes froq\encoding\decoder\DecoderException

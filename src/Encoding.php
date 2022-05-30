@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace froq\encoding;
 
 /**
+ * An enum class, provides encoding related constants.
+ *
  * @package froq\encoding
  * @object  froq\encoding\Encoding
  * @author  Kerem Güneş

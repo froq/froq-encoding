@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace froq\encoding\decoder;
 
 /**
+ * ZLib decoder class, provides decode operations for ZLib related jobs.
+ *
  * @package froq\encoding\decoder
  * @object  froq\encoding\decoder\ZLibDecoder
  * @author  Kerem Güneş

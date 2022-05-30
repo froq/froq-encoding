@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace froq\encoding\encoder;
 
 /**
+ * ZLib encoder class, provides encode operations for ZLib related jobs.
+ *
  * @package froq\encoding\encoder
  * @object  froq\encoding\encoder\ZLibEncoder
  * @author  Kerem Güneş

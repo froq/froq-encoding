@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace froq\encoding\decoder;
 
 /**
+ * JSON decoder class, provides decode operations for JSON related jobs.
+ *
  * @package froq\encoding\decoder
  * @object  froq\encoding\decoder\JsonDecoder
  * @author  Kerem Güneş

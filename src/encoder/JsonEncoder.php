@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace froq\encoding\encoder;
 
 /**
+ * JSON encoder class, provides encode operations for JSON related jobs.
+ *
  * @package froq\encoding\encoder
  * @object  froq\encoding\encoder\JsonEncoder
  * @author  Kerem Güneş
