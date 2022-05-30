@@ -113,6 +113,16 @@ abstract class Codec
             );
         }
 
+        if (!class_exists($class)) {
+            throw new CodecException('No class exists such ' . $class);
+        }
+
+        if ($name == 'encoder' && !class_extends($class, Encoder::class)) {
+            throw new CodecException('Class %s must extend class %s', [$class, Encoder::class]);
+        } elseif ($name == 'decoder' && !class_extends($class, Decoder::class)) {
+            throw new CodecException('Class %s must extend class %s', [$class, Decoder::class]);
+        }
+
         $options = array_options($options, $class::getDefaultOptions());
 
         return new $class($options);
