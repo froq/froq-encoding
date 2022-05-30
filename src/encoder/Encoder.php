@@ -22,15 +22,21 @@ abstract class Encoder
 {
     use OptionTrait, InputTrait, OutputTrait;
 
+    /** @var array */
+    protected static array $optionsDefault = ['throwErrors' => false];
+
     /**
      * Constructor.
      *
      * @param array|null $options
-     * @param array|null $optionsDefault
      */
-    public function __construct(array $options = null, array $optionsDefault = null)
+    public function __construct(array $options = null)
     {
-        $optionsDefault ??= self::getDefaultOptions();
+        // Merge with subclass defaults.
+        $optionsDefault = array_options(
+            self::$optionsDefault,
+            static::$optionsDefault ?? null
+        );
 
         $this->setOptions(array_options($options, $optionsDefault));
     }
