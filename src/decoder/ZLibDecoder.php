@@ -38,9 +38,7 @@ class ZLibDecoder extends Decoder
                 throw new \LastError();
             }
         } catch (\Throwable $e) {
-            $this->error = new DecoderError(
-                $e->getMessage(), code: DecoderError::ZLIB, cause: $e
-            );
+            $this->error = new DecoderError($e, code: DecoderError::ZLIB);
 
             $this->errorCheck();
         }

@@ -39,9 +39,7 @@ class ZLibEncoder extends Encoder
                 throw new \LastError();
             }
         } catch (\Throwable $e) {
-            $this->error = new EncoderError(
-                $e->getMessage(), code: EncoderError::ZLIB, cause: $e
-            );
+            $this->error = new EncoderError($e, code: EncoderError::ZLIB);
 
             $this->errorCheck();
         }

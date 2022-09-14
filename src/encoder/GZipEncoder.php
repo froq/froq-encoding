@@ -39,9 +39,7 @@ class GZipEncoder extends Encoder
                 throw new \LastError();
             }
         } catch (\Throwable $e) {
-            $this->error = new EncoderError(
-                $e->getMessage(), code: EncoderError::GZIP, cause: $e
-            );
+            $this->error = new EncoderError($e, code: EncoderError::GZIP);
 
             $this->errorCheck();
         }

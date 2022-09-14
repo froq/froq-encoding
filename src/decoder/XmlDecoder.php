@@ -44,9 +44,7 @@ class XmlDecoder extends Decoder
                 )
             );
         } catch (\Throwable $e) {
-            $this->error = new DecoderError(
-                $e->getMessage(), code: DecoderError::XML, cause: $e
-            );
+            $this->error = new DecoderError($e, code: DecoderError::XML);
 
             $this->errorCheck();
         }

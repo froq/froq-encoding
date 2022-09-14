@@ -38,9 +38,7 @@ class GZipDecoder extends Decoder
                 throw new \LastError();
             }
         } catch (\Throwable $e) {
-            $this->error = new DecoderError(
-                $e->getMessage(), code: DecoderError::GZIP, cause: $e
-            );
+            $this->error = new DecoderError($e, code: DecoderError::GZIP);
 
             $this->errorCheck();
         }

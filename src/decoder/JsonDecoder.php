@@ -66,9 +66,7 @@ class JsonDecoder extends Decoder
             // Set object variables from output if given.
             $object && $this->output = set_object_vars($object, $this->output);
         } catch (\Throwable $e) {
-            $this->error = new DecoderError(
-                $e->getMessage(), code: DecoderError::JSON, cause: $e
-            );
+            $this->error = new DecoderError($e, code: DecoderError::JSON);
 
             $this->errorCheck();
         }

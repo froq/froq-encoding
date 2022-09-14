@@ -43,9 +43,7 @@ class XmlEncoder extends Encoder
                     )
                 );
         } catch (\Throwable $e) {
-            $this->error = new EncoderError(
-                $e->getMessage(), code: EncoderError::XML, cause: $e
-            );
+            $this->error = new EncoderError($e, code: EncoderError::XML);
 
             $this->errorCheck();
         }

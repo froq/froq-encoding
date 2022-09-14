@@ -70,9 +70,7 @@ class JsonEncoder extends Encoder
                 $this->output = self::prettify($this->output, $this->options['indent']);
             }
         } catch (\Throwable $e) {
-            $this->error = new EncoderError(
-                $e->getMessage(), code: EncoderError::JSON, cause: $e
-            );
+            $this->error = new EncoderError($e, code: EncoderError::JSON);
 
             $this->errorCheck();
         }
