@@ -9,9 +9,9 @@ namespace froq\encoding;
 
 /**
  * @package froq\encoding
- * @object  froq\encoding\EncodingException
+ * @object  froq\encoding\EncodingError
  * @author  Kerem Güneş
- * @since   3.0
+ * @since   6.0
  */
-class EncodingException extends \froq\common\Exception
+class EncodingError extends \froq\common\Error
 {}
