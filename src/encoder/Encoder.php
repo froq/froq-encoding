@@ -90,7 +90,7 @@ abstract class Encoder
     }
 
     /**
-     * Throw occured error on `decode()` calls if option `throwsErrors` not false.
+     * Throw occured error on `encode()` calls if option `throwsErrors` not false.
      *
      * @return void
      * @throws froq\encoding\encoder\EncoderError

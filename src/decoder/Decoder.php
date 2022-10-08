@@ -22,7 +22,7 @@ abstract class Decoder
 {
     use OptionTrait, InputTrait, OutputTrait;
 
-    /** @var froq\encoding\encoder\DecoderError|null */
+    /** @var froq\encoding\decoder\DecoderError|null */
     protected ?DecoderError $error = null;
 
     /** @var array */
@@ -47,7 +47,7 @@ abstract class Decoder
     /**
      * Get error property.
      *
-     * @return froq\encoding\encoder\DecoderError|null
+     * @return froq\encoding\decoder\DecoderError|null
      */
     public function error(): DecoderError|null
     {
