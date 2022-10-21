@@ -37,8 +37,8 @@ abstract class Encoder
     {
         // Merge with subclass defaults.
         $optionsDefault = array_options(
-            self::$optionsDefault,
-            static::$optionsDefault ?? null
+            static::$optionsDefault,
+            self::$optionsDefault
         );
 
         $this->setOptions(array_options($options, $optionsDefault));
