@@ -27,21 +27,23 @@ class XmlEncoder extends Encoder
     /**
      * @inheritDoc froq\encoding\encoder\Encoder
      */
-    public function encode(): bool
+    public function encode(mixed ...$options): bool
     {
         $this->inputCheck();
+
+        $options = $this->options($options, [
+            'charset', 'indent', 'indentString'
+        ]);
 
         // Wrap for type/dom errors etc.
         try {
             $this->output = Dom::createXmlDocument(
                     $this->input,
-                    $this->getOption('charset')
-                )->toString(
-                    $this->getOptions(
-                        ['indent', 'indentString'],
-                        combine: true
-                    )
-                );
+                    $options['charset']
+                )->toString([
+                    'indent'       => $options['indent'],
+                    'indentString' => $options['indentString']
+                ]);
         } catch (\Throwable $e) {
             $this->error = new EncoderError($e, code: EncoderError::XML);
 

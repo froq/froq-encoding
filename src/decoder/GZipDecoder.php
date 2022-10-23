@@ -23,15 +23,17 @@ class GZipDecoder extends Decoder
     /**
      * @inheritDoc froq\encoding\decoder\Decoder
      */
-    public function decode(): bool
+    public function decode(mixed ...$options): bool
     {
         $this->inputCheck();
+
+        $options = $this->options($options);
 
         // Wrap for type errors etc.
         try {
             $this->output = gzdecode(
                 $this->input,
-                $this->options['length']
+                $options['length']
             );
 
             if ($this->output === false) {

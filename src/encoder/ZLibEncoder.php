@@ -23,16 +23,18 @@ class ZLibEncoder extends Encoder
     /**
      * @inheritDoc froq\encoding\encoder\Encoder
      */
-    public function encode(): bool
+    public function encode(mixed ...$options): bool
     {
         $this->inputCheck();
+
+        $options = $this->options($options);
 
         // Wrap for type errors etc.
         try {
             $this->output = zlib_encode(
                 $this->input,
                 ZLIB_ENCODING_DEFLATE,
-                $this->options['level']
+                $options['level']
             );
 
             if ($this->output === false) {

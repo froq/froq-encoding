@@ -46,9 +46,11 @@ class JsonEncoder extends Encoder
     /**
      * @inheritDoc froq\encoding\encoder\Encoder
      */
-    public function encode(object $object = null): bool
+    public function encode(object $object = null, mixed ...$options): bool
     {
         $object || $this->inputCheck();
+
+        $options = $this->options($options);
 
         // Wrap for type errors etc.
         try {
@@ -57,8 +59,8 @@ class JsonEncoder extends Encoder
 
             $this->output = json_encode(
                 $this->input,
-                $this->options['flags'] |= static::FLAGS,
-                $this->options['depth'],
+                $options['flags'] |= static::FLAGS,
+                $options['depth'],
             );
 
             if ($message = json_error_message()) {
@@ -66,8 +68,8 @@ class JsonEncoder extends Encoder
             }
 
             // Prettify if requested.
-            if ($this->options['indent']) {
-                $this->output = self::prettify($this->output, $this->options['indent']);
+            if ($options['indent']) {
+                $this->output = self::prettify($this->output, $options['indent']);
             }
         } catch (\Throwable $e) {
             $this->error = new EncoderError($e, code: EncoderError::JSON);

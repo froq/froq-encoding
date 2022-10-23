@@ -74,6 +74,24 @@ abstract class Encoder
     }
 
     /**
+     * Get options, merge if new given or select only given keys.
+     *
+     * @param  array      $options
+     * @param  array|null $keys
+     * @return array
+     */
+    public function options(array $options = [], array $keys = null): array
+    {
+        // Merge with given options on runtime.
+        $options = array_merge($this->options, $options);
+
+        // Select given only keys if any given.
+        $keys && $options = array_select($options, $keys, combine: true);
+
+        return $options;
+    }
+
+    /**
      * Ensure `setInput()` called to set `$input` property for `encode()` calls.
      *
      * @return void

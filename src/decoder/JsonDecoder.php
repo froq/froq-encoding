@@ -46,17 +46,19 @@ class JsonDecoder extends Decoder
     /**
      * @inheritDoc froq\encoding\decoder\Decoder
      */
-    public function decode(object $object = null): bool
+    public function decode(object $object = null, mixed ...$options): bool
     {
         $this->inputCheck();
+
+        $options = $this->options($options);
 
         // Wrap for type errors etc.
         try {
             $this->output = json_decode(
                 $this->input,
-                $this->options['assoc'],
-                $this->options['depth'],
-                $this->options['flags'] |= static::FLAGS,
+                $options['assoc'],
+                $options['depth'],
+                $options['flags'] |= static::FLAGS,
             );
 
             if ($message = json_error_message()) {
@@ -72,5 +74,16 @@ class JsonDecoder extends Decoder
         }
 
         return ($this->error == null);
+    }
+
+    /**
+     * Validate self input whether a valid JSON string or not.
+     *
+     * @param  \JsonError|null &$error
+     * @return bool
+     */
+    public function validateInput(\JsonError &$error = null): bool
+    {
+        return \Json::validate($this->input, $error);
     }
 }

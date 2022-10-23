@@ -29,19 +29,20 @@ class XmlDecoder extends Decoder
     /**
      * @inheritDoc froq\encoding\decoder\Decoder
      */
-    public function decode(): bool
+    public function decode(mixed ...$options): bool
     {
         $this->inputCheck();
+
+        $options = $this->options($options, [
+            'validateOnParse', 'preserveWhiteSpace', 'strictErrorChecking',
+            'throwErrors',     'flags',              'assoc'
+        ]);
 
         // Wrap for type/dom errors etc.
         try {
             $this->output = Dom::parseXml(
                 $this->input,
-                $this->getOptions(
-                    ['validateOnParse', 'preserveWhiteSpace', 'strictErrorChecking',
-                     'throwErrors', 'flags', 'assoc'],
-                    combine: true
-                )
+                $options
             );
         } catch (\Throwable $e) {
             $this->error = new DecoderError($e, code: DecoderError::XML);
