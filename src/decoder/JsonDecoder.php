@@ -79,7 +79,7 @@ class JsonDecoder extends Decoder
     /**
      * Validate self input whether a valid JSON string or not.
      *
-     * @param  \JsonError|null &$error
+     * @param  JsonError|null &$error
      * @return bool
      */
     public function validateInput(\JsonError &$error = null): bool
