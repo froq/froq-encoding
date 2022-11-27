@@ -105,7 +105,7 @@ abstract class Codec
 
         if (!$class = array_pluck($options, 'class')) {
             throw new CodecException(
-                'Option `class` must be given in %s as a valid class',
+                'Option "class" must be given in %s as a valid class',
                 static::class
             );
         }
@@ -114,9 +114,9 @@ abstract class Codec
             throw new CodecException('No class exists such ' . $class);
         }
 
-        if ($name == 'encoder' && !class_extends($class, Encoder::class)) {
+        if ($name === 'encoder' && !class_extends($class, Encoder::class)) {
             throw new CodecException('Class %s must extend class %s', [$class, Encoder::class]);
-        } elseif ($name == 'decoder' && !class_extends($class, Decoder::class)) {
+        } elseif ($name === 'decoder' && !class_extends($class, Decoder::class)) {
             throw new CodecException('Class %s must extend class %s', [$class, Decoder::class]);
         }
 
