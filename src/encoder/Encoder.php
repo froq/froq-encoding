@@ -131,7 +131,7 @@ abstract class Encoder
     protected static function isEncoded(string $type, mixed $input): bool
     {
         // Special case of JSON stuff.
-        if ($type == 'json' && is_string($input) && (
+        if ($type === 'json' && is_string($input) && (
             is_numeric($input) || equals($input, 'null', 'true', 'false')
         )) {
             return true;
@@ -141,14 +141,14 @@ abstract class Encoder
             'json' => is_string($input)
                    && isset($input[0], $input[-1])
                    && (
-                        ($input[0] . $input[-1]) == '{}' ||
-                        ($input[0] . $input[-1]) == '[]' ||
-                        ($input[0] . $input[-1]) == '""'
+                        ($input[0] . $input[-1]) === '{}' ||
+                        ($input[0] . $input[-1]) === '[]' ||
+                        ($input[0] . $input[-1]) === '""'
                       ),
             'xml' => is_string($input)
                   && isset($input[0], $input[-1])
                   && (
-                        ($input[0] . $input[-1]) == '<>'
+                        ($input[0] . $input[-1]) === '<>'
                      ),
             'gzip' => is_string($input)
                    && str_starts_with($input, "\x1F\x8B"), // Constant.
@@ -161,7 +161,7 @@ abstract class Encoder
                       ),
 
             default => throw new EncoderException(
-                'Invalid type `%s` [valids: json, xml, gzip, zlib]', $type
+                'Invalid type %q [valids: json, xml, gzip, zlib]', $type
             )
         };
     }
