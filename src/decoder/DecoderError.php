@@ -15,10 +15,7 @@ namespace froq\encoding\decoder;
  */
 class DecoderError extends \froq\encoding\EncodingError
 {
-    /**
-     * Codes.
-     * @const int
-     */
-    public final const GZIP = 1, ZLIB = 2,
-                       JSON = 3, XML  = 4;
+    /** Codes. */
+    public const GZIP = 1, ZLIB = 2,
+                 JSON = 3, XML  = 4;
 }
