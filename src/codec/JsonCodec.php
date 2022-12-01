@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright (c) 2015 · Kerem Güneş
  * Apache License 2.0 · http://github.com/froq/froq-encoding
  */
-declare(strict_types=1);
-
 namespace froq\encoding\codec;
 
 use froq\encoding\encoder\JsonEncoder;
@@ -14,7 +12,7 @@ use froq\encoding\decoder\JsonDecoder;
  * JSON codec class, provides encode/decode operations for JSON related jobs.
  *
  * @package froq\encoding\codec
- * @object  froq\encoding\codec\JsonCodec
+ * @class   froq\encoding\codec\JsonCodec
  * @author  Kerem Güneş
  * @since   6.0
  */

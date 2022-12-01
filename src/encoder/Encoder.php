@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright (c) 2015 · Kerem Güneş
  * Apache License 2.0 · http://github.com/froq/froq-encoding
  */
-declare(strict_types=1);
-
 namespace froq\encoding\encoder;
 
 use froq\common\trait\{OptionTrait, InputTrait, OutputTrait};
@@ -14,7 +12,7 @@ use froq\common\trait\{OptionTrait, InputTrait, OutputTrait};
  * with other input/output related methods
  *
  * @package froq\encoding\encoder
- * @object  froq\encoding\encoder\Encoder
+ * @class   froq\encoding\encoder\Encoder
  * @author  Kerem Güneş
  * @since   6.0
  */
@@ -22,10 +20,10 @@ abstract class Encoder
 {
     use OptionTrait, InputTrait, OutputTrait;
 
-    /** @var froq\encoding\encoder\EncoderError|null */
+    /** Encoder error. */
     protected ?EncoderError $error = null;
 
-    /** @var array */
+    /** Default options. */
     protected static array $optionsDefault = ['throwErrors' => false];
 
     /**

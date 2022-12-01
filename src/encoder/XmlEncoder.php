@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright (c) 2015 · Kerem Güneş
  * Apache License 2.0 · http://github.com/froq/froq-encoding
  */
-declare(strict_types=1);
-
 namespace froq\encoding\encoder;
 
 use froq\dom\Dom;
@@ -13,13 +11,13 @@ use froq\dom\Dom;
  * XML encoder class, provides encode operations for XML related jobs.
  *
  * @package froq\encoding\encoder
- * @object  froq\encoding\encoder\XmlEncoder
+ * @class   froq\encoding\encoder\XmlEncoder
  * @author  Kerem Güneş
  * @since   6.0
  */
 class XmlEncoder extends Encoder
 {
-    /** @var array */
+    /** Default options. */
     protected static array $optionsDefault = [
         'charset' => 'utf-8', 'indent' => false, 'indentString' => '  ',
     ];
@@ -29,6 +27,7 @@ class XmlEncoder extends Encoder
      */
     public function encode(mixed ...$options): bool
     {
+        $this->error = null;
         $this->inputCheck();
 
         $options = $this->options($options, [
@@ -46,11 +45,10 @@ class XmlEncoder extends Encoder
                 ]);
         } catch (\Throwable $e) {
             $this->error = new EncoderError($e, code: EncoderError::XML);
-
             $this->errorCheck();
         }
 
-        return ($this->error == null);
+        return ($this->error === null);
     }
 
     /**

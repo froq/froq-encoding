@@ -1,28 +1,26 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright (c) 2015 · Kerem Güneş
  * Apache License 2.0 · http://github.com/froq/froq-encoding
  */
-declare(strict_types=1);
-
 namespace froq\encoding\encoder;
 
 /**
  * JSON encoder class, provides encode operations for JSON related jobs.
  *
  * @package froq\encoding\encoder
- * @object  froq\encoding\encoder\JsonEncoder
+ * @class   froq\encoding\encoder\JsonEncoder
  * @author  Kerem Güneş
  * @since   6.0
  */
 class JsonEncoder extends Encoder
 {
-    /** @const int */
+    /** Default flags. */
     public const FLAGS = JSON_PRESERVE_ZERO_FRACTION
                        | JSON_UNESCAPED_SLASHES
                        | JSON_UNESCAPED_UNICODE;
 
-    /** @var array */
+    /** Default options. */
     protected static array $optionsDefault = [
         'flags' => 0, 'depth' => 512, 'indent' => null
     ];
@@ -48,6 +46,7 @@ class JsonEncoder extends Encoder
      */
     public function encode(object $object = null, mixed ...$options): bool
     {
+        $this->error = null;
         $object || $this->inputCheck();
 
         $options = $this->options($options);
@@ -73,11 +72,10 @@ class JsonEncoder extends Encoder
             }
         } catch (\Throwable $e) {
             $this->error = new EncoderError($e, code: EncoderError::JSON);
-
             $this->errorCheck();
         }
 
-        return ($this->error == null);
+        return ($this->error === null);
     }
 
     /**
