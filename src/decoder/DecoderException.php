@@ -12,4 +12,9 @@ namespace froq\encoding\decoder;
  * @since   6.0
  */
 class DecoderException extends \froq\encoding\EncodingException
-{}
+{
+    public static function forNoInputGiven(string $class): static
+    {
+        return new static('No input given yet, call %s::setInput() first', $class);
+    }
+}

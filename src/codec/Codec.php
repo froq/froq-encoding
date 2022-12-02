@@ -102,20 +102,17 @@ abstract class Codec
         $options = (array) $this->getOption($name);
 
         if (!$class = array_pluck($options, 'class')) {
-            throw new CodecException(
-                'Option "class" must be given in %s as a valid class',
-                static::class
-            );
+            throw CodecException::forAbsentClassOption(static::class);
         }
 
         if (!class_exists($class)) {
-            throw new CodecException('No class exists such ' . $class);
+            throw CodecException::forAbsentClass($class);
         }
 
         if ($name === 'encoder' && !class_extends($class, Encoder::class)) {
-            throw new CodecException('Class %s must extend class %s', [$class, Encoder::class]);
+            throw CodecException::forInvalidSubclass($class, Encoder::class);
         } elseif ($name === 'decoder' && !class_extends($class, Decoder::class)) {
-            throw new CodecException('Class %s must extend class %s', [$class, Decoder::class]);
+            throw CodecException::forInvalidSubclass($class, Decoder::class);
         }
 
         $options = array_options($options, $class::getDefaultOptions());

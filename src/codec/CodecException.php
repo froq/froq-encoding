@@ -12,4 +12,19 @@ namespace froq\encoding\codec;
  * @since   6.0
  */
 class CodecException extends \froq\encoding\EncodingException
-{}
+{
+    public static function forAbsentClassOption(string $class): static
+    {
+        return new static('Option "class" must be given in %s as a valid class', $class);
+    }
+
+    public static function forAbsentClass(string $class): static
+    {
+        return new static('No class exists such %s', $class);
+    }
+
+    public static function forInvalidSubclass(string $class, string $parent): static
+    {
+        return new static('Class %s must extend class %s', [$class, $parent]);
+    }
+}

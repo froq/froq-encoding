@@ -98,10 +98,7 @@ abstract class Encoder
     protected function inputCheck(): void
     {
         if (!$this->hasInput()) {
-            throw new EncoderException(
-                'No input given yet, call %s::setInput() first',
-                static::class
-            );
+            throw EncoderException::forNoInputGiven(static::class);
         }
     }
 
@@ -158,9 +155,8 @@ abstract class Encoder
                         str_starts_with($input, "\x78\x01")    // None/low.
                       ),
 
-            default => throw new EncoderException(
-                'Invalid type %q [valids: json, xml, gzip, zlib]', $type
-            )
+            // Invalid type.
+            default => throw EncoderException::forInvalidType($type)
         };
     }
 

@@ -98,10 +98,7 @@ abstract class Decoder
     protected function inputCheck(): void
     {
         if (!$this->hasInput()) {
-            throw new DecoderException(
-                'No input given yet, call %s::setInput() first',
-                static::class
-            );
+            throw DecoderException::forNoInputGiven(static::class);
         }
     }
 

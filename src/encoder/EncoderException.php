@@ -12,4 +12,14 @@ namespace froq\encoding\encoder;
  * @since   6.0
  */
 class EncoderException extends \froq\encoding\EncodingException
-{}
+{
+    public static function forNoInputGiven(string $class): static
+    {
+        return new static('No input given yet, call %s::setInput() first', $class);
+    }
+
+    public static function forInvalidType(string $type): static
+    {
+        return new static('Invalid type %q [valids: json, xml, gzip, zlib]', $type);
+    }
+}
