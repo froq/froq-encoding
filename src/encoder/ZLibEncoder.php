@@ -1,23 +1,21 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright (c) 2015 · Kerem Güneş
  * Apache License 2.0 · http://github.com/froq/froq-encoding
  */
-declare(strict_types=1);
-
 namespace froq\encoding\encoder;
 
 /**
  * ZLib encoder class, provides encode operations for ZLib related jobs.
  *
  * @package froq\encoding\encoder
- * @object  froq\encoding\encoder\ZLibEncoder
+ * @class   froq\encoding\encoder\ZLibEncoder
  * @author  Kerem Güneş
  * @since   6.0
  */
 class ZLibEncoder extends Encoder
 {
-    /** @var array */
+    /** Default options. */
     protected static array $optionsDefault = ['level' => -1];
 
     /**
@@ -25,6 +23,7 @@ class ZLibEncoder extends Encoder
      */
     public function encode(mixed ...$options): bool
     {
+        $this->error = null;
         $this->inputCheck();
 
         $options = $this->options($options);
@@ -42,11 +41,10 @@ class ZLibEncoder extends Encoder
             }
         } catch (\Throwable $e) {
             $this->error = new EncoderError($e, code: EncoderError::ZLIB);
-
             $this->errorCheck();
         }
 
-        return ($this->error == null);
+        return ($this->error === null);
     }
 
     /**

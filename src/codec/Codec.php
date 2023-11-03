@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright (c) 2015 · Kerem Güneş
  * Apache License 2.0 · http://github.com/froq/froq-encoding
  */
-declare(strict_types=1);
-
 namespace froq\encoding\codec;
 
 use froq\encoding\encoder\{Encoder, EncoderError};
@@ -16,7 +14,7 @@ use froq\common\trait\OptionTrait;
  * and provides encode/decode operations for subclasses using these properties.
  *
  * @package froq\encoding\codec
- * @object  froq\encoding\codec\Codec
+ * @class   froq\encoding\codec\Codec
  * @author  Kerem Güneş
  * @since   6.0
  */
@@ -24,10 +22,10 @@ abstract class Codec
 {
     use OptionTrait;
 
-    /** @var froq\encoding\encoder\Encoder */
+    /** Encoder instance. */
     private readonly Encoder $encoder;
 
-    /** @var froq\encoding\decoder\Decoder */
+    /** Decoder instance. */
     private readonly Decoder $decoder;
 
     /**
@@ -104,20 +102,17 @@ abstract class Codec
         $options = (array) $this->getOption($name);
 
         if (!$class = array_pluck($options, 'class')) {
-            throw new CodecException(
-                'Option `class` must be given in %s as a valid class',
-                static::class
-            );
+            throw CodecException::forAbsentClassOption(static::class);
         }
 
         if (!class_exists($class)) {
-            throw new CodecException('No class exists such ' . $class);
+            throw CodecException::forAbsentClass($class);
         }
 
-        if ($name == 'encoder' && !class_extends($class, Encoder::class)) {
-            throw new CodecException('Class %s must extend class %s', [$class, Encoder::class]);
-        } elseif ($name == 'decoder' && !class_extends($class, Decoder::class)) {
-            throw new CodecException('Class %s must extend class %s', [$class, Decoder::class]);
+        if ($name === 'encoder' && !class_extends($class, Encoder::class)) {
+            throw CodecException::forInvalidSubclass($class, Encoder::class);
+        } elseif ($name === 'decoder' && !class_extends($class, Decoder::class)) {
+            throw CodecException::forInvalidSubclass($class, Decoder::class);
         }
 
         $options = array_options($options, $class::getDefaultOptions());

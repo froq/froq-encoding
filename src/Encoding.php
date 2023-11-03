@@ -1,41 +1,30 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright (c) 2015 · Kerem Güneş
  * Apache License 2.0 · http://github.com/froq/froq-encoding
  */
-declare(strict_types=1);
-
 namespace froq\encoding;
 
 /**
  * An enum class, provides encoding related constants.
  *
  * @package froq\encoding
- * @object  froq\encoding\Encoding
+ * @class   froq\encoding\Encoding
  * @author  Kerem Güneş
  * @since   6.0
  * @enum
  */
 class Encoding extends \froq\common\object\Enum
 {
-    /**
-     * ASCII.
-     * @const string
-     */
+    /** ASCII. */
     public final const ASCII = 'ascii';
 
-    /**
-     * UTF set.
-     * @const string
-     */
+    /** UTF set. */
     public final const UTF_8  = 'utf-8',
                        UTF_16 = 'utf-16',
                        UTF_32 = 'utf-32';
 
-    /**
-     * ISO set.
-     * @const string
-     */
+    /** ISO set. */
     public final const ISO_8859_1  = 'iso-8859-1',
                        ISO_8859_2  = 'iso-8859-2',
                        ISO_8859_3  = 'iso-8859-3',

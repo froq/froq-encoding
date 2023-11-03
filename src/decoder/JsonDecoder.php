@@ -1,26 +1,24 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright (c) 2015 · Kerem Güneş
  * Apache License 2.0 · http://github.com/froq/froq-encoding
  */
-declare(strict_types=1);
-
 namespace froq\encoding\decoder;
 
 /**
  * JSON decoder class, provides decode operations for JSON related jobs.
  *
  * @package froq\encoding\decoder
- * @object  froq\encoding\decoder\JsonDecoder
+ * @class   froq\encoding\decoder\JsonDecoder
  * @author  Kerem Güneş
  * @since   6.0
  */
 class JsonDecoder extends Decoder
 {
-    /** @const int */
+    /** Default flags. */
     public const FLAGS = JSON_BIGINT_AS_STRING;
 
-    /** @var array */
+    /** Default options. */
     protected static array $optionsDefault = [
         'flags' => 0, 'depth' => 512, 'assoc' => null,
     ];
@@ -48,6 +46,7 @@ class JsonDecoder extends Decoder
      */
     public function decode(object $object = null, mixed ...$options): bool
     {
+        $this->error = null;
         $this->inputCheck();
 
         $options = $this->options($options);
@@ -66,14 +65,13 @@ class JsonDecoder extends Decoder
             }
 
             // Set object variables from output if given.
-            $object && $this->output = set_object_vars($object, $this->output);
+            $object && $this->output = set_object_vars($object, (array) $this->output);
         } catch (\Throwable $e) {
             $this->error = new DecoderError($e, code: DecoderError::JSON);
-
             $this->errorCheck();
         }
 
-        return ($this->error == null);
+        return ($this->error === null);
     }
 
     /**

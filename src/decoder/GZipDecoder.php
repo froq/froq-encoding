@@ -1,23 +1,21 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright (c) 2015 · Kerem Güneş
  * Apache License 2.0 · http://github.com/froq/froq-encoding
  */
-declare(strict_types=1);
-
 namespace froq\encoding\decoder;
 
 /**
  * GZip decoder class, provides decode operations for GZip related jobs.
  *
  * @package froq\encoding\decoder
- * @object  froq\encoding\decoder\GZipDecoder
+ * @class   froq\encoding\decoder\GZipDecoder
  * @author  Kerem Güneş
  * @since   6.0
  */
 class GZipDecoder extends Decoder
 {
-    /** @var array */
+    /** Default options. */
     protected static array $optionsDefault = ['length' => 0];
 
     /**
@@ -25,6 +23,7 @@ class GZipDecoder extends Decoder
      */
     public function decode(mixed ...$options): bool
     {
+        $this->error = null;
         $this->inputCheck();
 
         $options = $this->options($options);
@@ -41,10 +40,9 @@ class GZipDecoder extends Decoder
             }
         } catch (\Throwable $e) {
             $this->error = new DecoderError($e, code: DecoderError::GZIP);
-
             $this->errorCheck();
         }
 
-        return ($this->error == null);
+        return ($this->error === null);
     }
 }

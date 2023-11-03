@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright (c) 2015 · Kerem Güneş
  * Apache License 2.0 · http://github.com/froq/froq-encoding
  */
-declare(strict_types=1);
-
 namespace froq\encoding\decoder;
 
 use froq\common\trait\{OptionTrait, InputTrait, OutputTrait};
@@ -14,7 +12,7 @@ use froq\common\trait\{OptionTrait, InputTrait, OutputTrait};
  * with other input/output related methods.
  *
  * @package froq\encoding\decoder
- * @object  froq\encoding\decoder\Decoder
+ * @class   froq\encoding\decoder\Decoder
  * @author  Kerem Güneş
  * @since   6.0
  */
@@ -22,10 +20,10 @@ abstract class Decoder
 {
     use OptionTrait, InputTrait, OutputTrait;
 
-    /** @var froq\encoding\decoder\DecoderError|null */
+    /** Decoder error. */
     protected ?DecoderError $error = null;
 
-    /** @var array */
+    /** Default options. */
     protected static array $optionsDefault = ['throwErrors' => false];
 
     /**
@@ -100,10 +98,7 @@ abstract class Decoder
     protected function inputCheck(): void
     {
         if (!$this->hasInput()) {
-            throw new DecoderException(
-                'No input given yet, call %s::setInput() first',
-                static::class
-            );
+            throw DecoderException::forNoInputGiven(static::class);
         }
     }
 

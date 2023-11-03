@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright (c) 2015 · Kerem Güneş
  * Apache License 2.0 · http://github.com/froq/froq-encoding
  */
-declare(strict_types=1);
-
 namespace froq\encoding\encoder;
 
 use froq\common\trait\{OptionTrait, InputTrait, OutputTrait};
@@ -14,7 +12,7 @@ use froq\common\trait\{OptionTrait, InputTrait, OutputTrait};
  * with other input/output related methods
  *
  * @package froq\encoding\encoder
- * @object  froq\encoding\encoder\Encoder
+ * @class   froq\encoding\encoder\Encoder
  * @author  Kerem Güneş
  * @since   6.0
  */
@@ -22,10 +20,10 @@ abstract class Encoder
 {
     use OptionTrait, InputTrait, OutputTrait;
 
-    /** @var froq\encoding\encoder\EncoderError|null */
+    /** Encoder error. */
     protected ?EncoderError $error = null;
 
-    /** @var array */
+    /** Default options. */
     protected static array $optionsDefault = ['throwErrors' => false];
 
     /**
@@ -100,10 +98,7 @@ abstract class Encoder
     protected function inputCheck(): void
     {
         if (!$this->hasInput()) {
-            throw new EncoderException(
-                'No input given yet, call %s::setInput() first',
-                static::class
-            );
+            throw EncoderException::forNoInputGiven(static::class);
         }
     }
 
@@ -131,7 +126,7 @@ abstract class Encoder
     protected static function isEncoded(string $type, mixed $input): bool
     {
         // Special case of JSON stuff.
-        if ($type == 'json' && is_string($input) && (
+        if ($type === 'json' && is_string($input) && (
             is_numeric($input) || equals($input, 'null', 'true', 'false')
         )) {
             return true;
@@ -141,14 +136,14 @@ abstract class Encoder
             'json' => is_string($input)
                    && isset($input[0], $input[-1])
                    && (
-                        ($input[0] . $input[-1]) == '{}' ||
-                        ($input[0] . $input[-1]) == '[]' ||
-                        ($input[0] . $input[-1]) == '""'
+                        ($input[0] . $input[-1]) === '{}' ||
+                        ($input[0] . $input[-1]) === '[]' ||
+                        ($input[0] . $input[-1]) === '""'
                       ),
             'xml' => is_string($input)
                   && isset($input[0], $input[-1])
                   && (
-                        ($input[0] . $input[-1]) == '<>'
+                        ($input[0] . $input[-1]) === '<>'
                      ),
             'gzip' => is_string($input)
                    && str_starts_with($input, "\x1F\x8B"), // Constant.
@@ -160,9 +155,8 @@ abstract class Encoder
                         str_starts_with($input, "\x78\x01")    // None/low.
                       ),
 
-            default => throw new EncoderException(
-                'Invalid type `%s` [valids: json, xml, gzip, zlib]', $type
-            )
+            // Invalid type.
+            default => throw EncoderException::forInvalidType($type)
         };
     }
 
