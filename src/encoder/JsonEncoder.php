@@ -62,8 +62,8 @@ class JsonEncoder extends Encoder
                 $options['depth'],
             );
 
-            if ($message = json_error_message()) {
-                throw new \JsonError($message);
+            if ($message = json_error_message($code)) {
+                throw new \JsonError($message, code: $code);
             }
 
             // Prettify if requested.

@@ -60,8 +60,8 @@ class JsonDecoder extends Decoder
                 $options['flags'] |= static::FLAGS,
             );
 
-            if ($message = json_error_message()) {
-                throw new \JsonError($message);
+            if ($message = json_error_message($code)) {
+                throw new \JsonError($message, code: $code);
             }
 
             // Set object variables from output if given.
