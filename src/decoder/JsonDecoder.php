@@ -75,13 +75,13 @@ class JsonDecoder extends Decoder
     }
 
     /**
-     * Validate self input whether a valid JSON string or not.
+     * Verify self input whether a valid JSON string or not.
      *
      * @param  JsonError|null &$error
      * @return bool
      */
-    public function validateInput(\JsonError &$error = null): bool
+    public function verifyInput(\JsonError &$error = null): bool
     {
-        return \Json::validate($this->input, $error);
+        return \Json::verify($this->input, $error);
     }
 }
